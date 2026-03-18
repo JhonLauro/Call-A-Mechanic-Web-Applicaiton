@@ -26,6 +26,18 @@ export const AuthProvider = ({ children }) => {
     }
   }, []);
 
+  useEffect(() => {
+    const handleUnauthorized = () => {
+      setToken(null);
+      setUser(null);
+    };
+
+    window.addEventListener('cam:unauthorized', handleUnauthorized);
+    return () => {
+      window.removeEventListener('cam:unauthorized', handleUnauthorized);
+    };
+  }, []);
+
   const persistSession = (tokenValue, userValue) => {
     localStorage.setItem('cam_token', tokenValue);
     localStorage.setItem('cam_user', JSON.stringify(userValue));

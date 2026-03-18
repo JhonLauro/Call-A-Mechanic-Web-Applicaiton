@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import Snackbar from '../components/Snackbar';
 import './AuthPages.css';
 
 const validateEmail = (email) =>
@@ -122,12 +123,6 @@ const RegisterPage = () => {
           <p className="auth-brand">Call-A-Mechanic</p>
           <h2 className="auth-title">Create Account</h2>
           <p className="auth-subtitle">Fill in the details below to register</p>
-
-          {apiError && (
-            <div className="api-error-banner" role="alert">
-              {apiError}
-            </div>
-          )}
 
           <form onSubmit={handleSubmit} noValidate>
 
@@ -274,6 +269,13 @@ const RegisterPage = () => {
             Already have an account?{' '}
             <Link to="/login">Sign in</Link>
           </p>
+
+          <Snackbar
+            open={!!apiError}
+            message={apiError}
+            type="error"
+            onClose={() => setApiError('')}
+          />
         </div>
       </div>
 

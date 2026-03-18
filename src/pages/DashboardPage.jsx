@@ -1,5 +1,5 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import './DashboardPage.css';
 
@@ -93,7 +93,7 @@ const DashboardPage = () => {
             <p>View and manage your service history.</p>
             <p className="dashboard-tile-arrow">View all →</p>
           </div>
-          <div className="dashboard-tile">
+          <Link to="/profile" className="dashboard-tile" style={{ textDecoration: 'none' }}>
             <div className="dashboard-tile-icon tile-purple">
               <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#7c3aed" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
@@ -103,7 +103,7 @@ const DashboardPage = () => {
             <h3>My Profile</h3>
             <p>Update your personal information and preferences.</p>
             <p className="dashboard-tile-arrow">Edit profile →</p>
-          </div>
+          </Link>
         </div>
 
       </main>

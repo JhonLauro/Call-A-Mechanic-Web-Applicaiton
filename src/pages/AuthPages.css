@@ -308,43 +308,6 @@
   font-size: 10px;
 }
 
-/* ── Strength meter ── */
-.strength-meter {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin-top: 8px;
-}
-
-.strength-bars {
-  display: flex;
-  gap: 4px;
-  flex: 1;
-}
-
-.strength-bar {
-  flex: 1;
-  height: 4px;
-  border-radius: 99px;
-  background: #e2e8f0;
-  transition: background 0.25s;
-}
-
-.strength-bar.strength-weak   { background: #ef4444; }
-.strength-bar.strength-medium { background: #f59e0b; }
-.strength-bar.strength-strong { background: #22c55e; }
-
-.strength-label {
-  font-size: 11px;
-  font-weight: 600;
-  min-width: 46px;
-  text-align: right;
-}
-
-.strength-label.strength-weak   { color: #ef4444; }
-.strength-label.strength-medium { color: #f59e0b; }
-.strength-label.strength-strong { color: #22c55e; }
-
 /* ── Submit button ── */
 .btn-primary {
   width: 100%;

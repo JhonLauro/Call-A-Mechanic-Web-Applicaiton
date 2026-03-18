@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import Snackbar from '../components/Snackbar';
 import './AuthPages.css';
 
 const LoginPage = () => {
@@ -87,12 +88,6 @@ const LoginPage = () => {
           <h2 className="auth-title">Sign In</h2>
           <p className="auth-subtitle">Enter your credentials to continue</p>
 
-          {apiError && (
-            <div className="api-error-banner" role="alert">
-              {apiError}
-            </div>
-          )}
-
           <form onSubmit={handleSubmit} noValidate>
             <div className="form-group">
               <label htmlFor="identifier">Email / Mechanic ID / Admin ID</label>
@@ -159,6 +154,13 @@ const LoginPage = () => {
             Don't have an account?{' '}
             <Link to="/register">Create one</Link>
           </p>
+
+          <Snackbar
+            open={!!apiError}
+            message={apiError}
+            type="error"
+            onClose={() => setApiError('')}
+          />
         </div>
       </div>
 

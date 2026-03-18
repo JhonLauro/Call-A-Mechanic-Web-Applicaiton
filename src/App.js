@@ -4,6 +4,10 @@ import { useAuth } from './context/AuthContext';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import DashboardPage from './pages/DashboardPage';
+import ProfilePage from './pages/ProfilePage';
+import EditProfilePage from './pages/EditProfilePage';
+import EditPasswordPage from './pages/EditPasswordPage';
+import UploadPhotoPage from './pages/UploadPhotoPage';
 
 /**
  * ProtectedRoute — redirects unauthenticated users to /login.
@@ -45,6 +49,38 @@ function App() {
           element={
             <ProtectedRoute>
               <DashboardPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/profile"
+          element={
+            <ProtectedRoute>
+              <ProfilePage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/profile/edit"
+          element={
+            <ProtectedRoute>
+              <EditProfilePage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/profile/password"
+          element={
+            <ProtectedRoute>
+              <EditPasswordPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/profile/photo"
+          element={
+            <ProtectedRoute>
+              <UploadPhotoPage />
             </ProtectedRoute>
           }
         />
