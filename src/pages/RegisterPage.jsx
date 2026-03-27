@@ -93,33 +93,77 @@ const RegisterPage = () => {
 
   return (
     <div className="auth-page">
+      <Link to="/" className="back-home-btn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+          <path strokeLinecap="round" strokeLinejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+        </svg>
+        Back to Home
+      </Link>
 
       {/* ── Left branding panel ── */}
       <div className="auth-left">
         <div className="auth-left-content">
-          <div className="auth-left-logo">🔧</div>
           <h1>Join<br /><span>Call-A-Mechanic</span></h1>
           <p>Create your account and get access to certified mechanics ready to help you on the road.</p>
           <div className="auth-left-features">
             <div className="auth-left-feature">
-              <div className="auth-left-feature-icon">⚡</div>
+              <div className="auth-left-feature-icon icon-speed">
+                <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
+                  <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
+                </svg>
+              </div>
               Fast response from certified mechanics
             </div>
             <div className="auth-left-feature">
-              <div className="auth-left-feature-icon">📍</div>
+              <div className="auth-left-feature-icon icon-location">
+                <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
+                  <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm3.5-9c.83 0 1.5-.67 1.5-1.5S16.33 8 15.5 8 14 8.67 14 9.5s.67 1.5 1.5 1.5z"/>
+                </svg>
+              </div>
               Real-time location tracking
             </div>
             <div className="auth-left-feature">
-              <div className="auth-left-feature-icon">🛡️</div>
+              <div className="auth-left-feature-icon icon-security">
+                <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
+                  <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/>
+                </svg>
+              </div>
               Secure and verified service providers
             </div>
           </div>
         </div>
       </div>
 
+      {/* ── Decorative Divider ── */}
+      <div className="auth-divider">
+        <div className="auth-divider-line">
+          <div className="auth-divider-glow"></div>
+        </div>
+        <div className="auth-divider-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+            <circle cx="12" cy="12" r="3" />
+          </svg>
+        </div>
+        <div className="auth-divider-line">
+          <div className="auth-divider-glow"></div>
+        </div>
+        <div className="auth-divider-dots">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+      </div>
+
       {/* ── Right form panel ── */}
       <div className="auth-right">
         <div className="auth-form-box auth-form-box--wide">
+          <div className="auth-form-logo">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+              <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+            </svg>
+          </div>
           <p className="auth-brand">Call-A-Mechanic</p>
           <h2 className="auth-title">Create Account</h2>
           <p className="auth-subtitle">Fill in the details below to register</p>
@@ -173,7 +217,7 @@ const RegisterPage = () => {
                 value={form.phoneNumber}
                 onChange={handleChange}
                 className={fieldErrors.phoneNumber ? 'input-error' : ''}
-                placeholder="e.g. +1 555 000 0000"
+                placeholder="e.g. 63+ 9123456789"
               />
               {fieldErrors.phoneNumber && (
                 <span className="field-error">{fieldErrors.phoneNumber}</span>

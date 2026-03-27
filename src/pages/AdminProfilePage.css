@@ -1,0 +1,594 @@
+/* =====================================================
+   AdminProfilePage.css — Admin Account Profile
+   ===================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+.admin-profile {
+  min-height: 100vh;
+  background: #f8fafc;
+  font-family: 'Inter', system-ui, sans-serif;
+}
+
+/* ── Header ── */
+.ap-header {
+  background: #ffffff;
+  border-bottom: 1px solid #e2e8f0;
+  padding: 0 32px;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.ap-header-left {
+  display: flex;
+  align-items: center;
+}
+
+.ap-back-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 18px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #475569;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: inherit;
+}
+
+.ap-back-btn:hover {
+  background: #f1f5f9;
+  border-color: #cbd5e1;
+  color: #1e293b;
+}
+
+.ap-header-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.ap-admin-badge {
+  padding: 6px 14px;
+  background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%);
+  color: white;
+  font-size: 12px;
+  font-weight: 600;
+  border-radius: 20px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* ── Main Content ── */
+.ap-main {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 32px 32px 64px;
+}
+
+/* ── Page Header ── */
+.ap-page-header {
+  margin-bottom: 28px;
+}
+
+.ap-page-title {
+  font-size: 28px;
+  font-weight: 700;
+  color: #0f172a;
+  margin-bottom: 6px;
+  letter-spacing: -0.5px;
+}
+
+.ap-page-subtitle {
+  font-size: 15px;
+  color: #64748b;
+}
+
+/* ── Layout ── */
+.ap-layout {
+  display: grid;
+  grid-template-columns: 300px 1fr;
+  gap: 24px;
+  align-items: start;
+}
+
+.ap-left-column {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.ap-right-column {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* ── Cards ── */
+.ap-card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+}
+
+.ap-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.ap-card-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 16px;
+  font-weight: 600;
+  color: #0f172a;
+  margin: 0;
+}
+
+.ap-card-title svg {
+  color: #2563eb;
+}
+
+/* ── Profile Card ── */
+.ap-profile-card {
+  text-align: center;
+  padding: 32px 24px;
+}
+
+.ap-profile-avatar-wrapper {
+  position: relative;
+  display: inline-block;
+  margin-bottom: 16px;
+}
+
+.ap-profile-avatar,
+.ap-profile-avatar-placeholder {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+}
+
+.ap-profile-avatar {
+  object-fit: cover;
+  border: 4px solid #e2e8f0;
+}
+
+.ap-profile-avatar-placeholder {
+  background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 36px;
+  font-weight: 700;
+  border: 4px solid #c4b5fd;
+}
+
+.ap-avatar-edit-btn {
+  position: absolute;
+  bottom: 4px;
+  right: 4px;
+  width: 28px;
+  height: 28px;
+  background: #2563eb;
+  border: 2px solid white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s;
+  color: white;
+}
+
+.ap-avatar-edit-btn:hover {
+  background: #1d4ed8;
+  transform: scale(1.05);
+}
+
+.ap-profile-name {
+  font-size: 20px;
+  font-weight: 700;
+  color: #0f172a;
+  margin: 0 0 4px 0;
+}
+
+.ap-profile-id {
+  font-size: 13px;
+  color: #64748b;
+  display: block;
+  margin-bottom: 12px;
+}
+
+.ap-profile-badges {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.ap-badge {
+  padding: 5px 12px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.ap-badge-role {
+  background: #eff6ff;
+  color: #2563eb;
+}
+
+.ap-badge-status {
+  background: #dcfce7;
+  color: #16a34a;
+}
+
+.ap-edit-profile-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  padding: 12px 20px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #475569;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: inherit;
+}
+
+.ap-edit-profile-btn:hover {
+  background: #2563eb;
+  border-color: #2563eb;
+  color: white;
+}
+
+/* ── Summary Card ── */
+.ap-summary-card {
+  padding: 20px;
+}
+
+.ap-summary-card .ap-card-title {
+  font-size: 14px;
+  margin-bottom: 16px;
+  padding-bottom: 0;
+  border-bottom: none;
+}
+
+.ap-summary-stats {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.ap-summary-stat {
+  flex: 1;
+  text-align: center;
+  padding: 12px 8px;
+  background: #f8fafc;
+  border-radius: 10px;
+}
+
+.ap-summary-value {
+  display: block;
+  font-size: 22px;
+  font-weight: 700;
+  color: #2563eb;
+  line-height: 1.2;
+}
+
+.ap-summary-label {
+  font-size: 11px;
+  color: #64748b;
+  font-weight: 500;
+}
+
+/* ── Info Grid ── */
+.ap-info-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+
+.ap-info-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.ap-info-label {
+  font-size: 12px;
+  font-weight: 500;
+  color: #94a3b8;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.ap-info-value {
+  font-size: 15px;
+  font-weight: 500;
+  color: #0f172a;
+}
+
+/* ── Form ── */
+.ap-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.ap-form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.ap-form-group label {
+  font-size: 13px;
+  font-weight: 600;
+  color: #374151;
+}
+
+.ap-form-group input {
+  padding: 12px 14px;
+  background: #f8fafc;
+  border: 2px solid #e2e8f0;
+  border-radius: 10px;
+  font-size: 14px;
+  color: #1e293b;
+  font-family: inherit;
+  transition: all 0.2s;
+}
+
+.ap-form-group input:focus {
+  outline: none;
+  border-color: #3b82f6;
+  background: white;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.ap-form-group input::placeholder {
+  color: #94a3b8;
+}
+
+.ap-form-group input.ap-input-error {
+  border-color: #ef4444;
+}
+
+.ap-error {
+  font-size: 12px;
+  color: #ef4444;
+}
+
+.ap-form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 8px;
+  padding-top: 16px;
+  border-top: 1px solid #f1f5f9;
+}
+
+/* ── Buttons ── */
+.ap-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 20px;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: inherit;
+}
+
+.ap-btn-secondary {
+  background: white;
+  border: 1px solid #e2e8f0;
+  color: #475569;
+}
+
+.ap-btn-secondary:hover {
+  background: #f8fafc;
+  border-color: #cbd5e1;
+}
+
+.ap-btn-primary {
+  background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+  border: none;
+  color: white;
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+}
+
+.ap-btn-primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(37, 99, 235, 0.4);
+}
+
+.ap-btn-primary:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.ap-change-password-btn {
+  padding: 8px 14px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 500;
+  color: #475569;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: inherit;
+}
+
+.ap-change-password-btn:hover {
+  background: #2563eb;
+  border-color: #2563eb;
+  color: white;
+}
+
+/* ── Security Info ── */
+.ap-security-info {
+  margin-bottom: 20px;
+}
+
+.ap-security-item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 16px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+}
+
+.ap-security-icon {
+  width: 44px;
+  height: 44px;
+  background: linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #16a34a;
+}
+
+.ap-security-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.ap-security-label {
+  font-size: 13px;
+  color: #64748b;
+}
+
+.ap-security-value {
+  font-size: 18px;
+  font-weight: 600;
+  color: #0f172a;
+  letter-spacing: 2px;
+}
+
+/* ── Logout Section ── */
+.ap-logout-section {
+  padding-top: 20px;
+  border-top: 1px solid #f1f5f9;
+}
+
+.ap-logout-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  padding: 12px 20px;
+  background: white;
+  border: 1px solid #fecaca;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #dc2626;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: inherit;
+}
+
+.ap-logout-btn:hover {
+  background: #fef2f2;
+  border-color: #f87171;
+}
+
+/* ── Responsive ── */
+@media (max-width: 900px) {
+  .ap-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .ap-left-column {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+}
+
+@media (max-width: 768px) {
+  .ap-header {
+    padding: 0 16px;
+  }
+
+  .ap-main {
+    padding: 24px 16px 48px;
+  }
+
+  .ap-page-title {
+    font-size: 24px;
+  }
+
+  .ap-left-column {
+    grid-template-columns: 1fr;
+  }
+
+  .ap-info-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .ap-summary-stats {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .ap-form-actions {
+    flex-direction: column;
+  }
+
+  .ap-btn {
+    width: 100%;
+  }
+
+  .ap-card-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .ap-back-btn span {
+    display: none;
+  }
+
+  .ap-back-btn {
+    padding: 10px;
+  }
+}

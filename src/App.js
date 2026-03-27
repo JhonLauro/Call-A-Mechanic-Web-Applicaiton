@@ -1,13 +1,16 @@
 import React from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { useAuth } from './context/AuthContext';
+import LandingPage from './pages/LandingPage';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import DashboardPage from './pages/DashboardPage';
 import ProfilePage from './pages/ProfilePage';
+import AdminProfilePage from './pages/AdminProfilePage';
 import EditProfilePage from './pages/EditProfilePage';
 import EditPasswordPage from './pages/EditPasswordPage';
 import UploadPhotoPage from './pages/UploadPhotoPage';
+import UserRegistryPage from './pages/UserRegistryPage';
 
 /**
  * ProtectedRoute — redirects unauthenticated users to /login.
@@ -40,6 +43,7 @@ function App() {
     <BrowserRouter>
       <Routes>
         {/* Public routes */}
+        <Route path="/" element={<LandingPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
 
@@ -57,6 +61,22 @@ function App() {
           element={
             <ProtectedRoute>
               <ProfilePage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/profile"
+          element={
+            <ProtectedRoute>
+              <AdminProfilePage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/users"
+          element={
+            <ProtectedRoute>
+              <UserRegistryPage />
             </ProtectedRoute>
           }
         />
@@ -86,8 +106,7 @@ function App() {
         />
 
         {/* Default redirect */}
-        <Route path="/" element={<Navigate to="/login" replace />} />
-        <Route path="*" element={<Navigate to="/login" replace />} />
+        <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </BrowserRouter>
   );

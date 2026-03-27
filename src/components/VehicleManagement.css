@@ -1,0 +1,574 @@
+/* =====================================================
+   VehicleManagement.css — Floating Modal with Blur
+   ===================================================== */
+
+/* ── Overlay with blur ── */
+.vm-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(15, 23, 42, 0.4);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  animation: vmFadeIn 0.3s ease-out;
+}
+
+@keyframes vmFadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* ── Floating Modal Container ── */
+.vm-container {
+  background: #ffffff;
+  border-radius: 24px;
+  width: 100%;
+  max-width: 700px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 4px 24px rgba(59, 130, 246, 0.08), 0 25px 80px rgba(0, 0, 0, 0.2);
+  position: relative;
+  animation: vmSlideUp 0.3s ease-out;
+  border: 1px solid rgba(59, 130, 246, 0.08);
+}
+
+/* Decorative gradient accent at top */
+.vm-container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #3b82f6 0%, #8b5cf6 50%, #ec4899 100%);
+  border-radius: 24px 24px 0 0;
+}
+
+@keyframes vmSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Hide scrollbar but keep functionality */
+.vm-container::-webkit-scrollbar {
+  width: 6px;
+}
+
+.vm-container::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.vm-container::-webkit-scrollbar-thumb {
+  background: #e2e8f0;
+  border-radius: 3px;
+}
+
+.vm-container::-webkit-scrollbar-thumb:hover {
+  background: #cbd5e1;
+}
+
+/* ── Header ── */
+.vm-header {
+  padding: 28px 32px 0;
+  position: relative;
+}
+
+.vm-back-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 18px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #475569;
+  cursor: pointer;
+  transition: all 0.2s;
+  margin-bottom: 20px;
+}
+
+.vm-back-btn:hover {
+  background: #f1f5f9;
+  border-color: #cbd5e1;
+  color: #1e293b;
+  transform: translateX(-2px);
+}
+
+.vm-title {
+  font-size: 26px;
+  font-weight: 700;
+  color: #0f172a;
+  margin-bottom: 6px;
+  letter-spacing: -0.5px;
+}
+
+.vm-subtitle {
+  font-size: 14px;
+  color: #64748b;
+}
+
+/* ── Content ── */
+.vm-content {
+  padding: 24px 32px 32px;
+}
+
+/* ── Error Alert ── */
+.vm-error-alert {
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  color: #dc2626;
+  padding: 14px 16px;
+  border-radius: 10px;
+  font-size: 14px;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.vm-error-alert svg {
+  flex-shrink: 0;
+}
+
+/* ── Input Validation ── */
+.vm-input-error {
+  border-color: #ef4444 !important;
+  background: #fef2f2;
+}
+
+.vm-input-error:focus {
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1) !important;
+}
+
+.vm-error {
+  color: #dc2626;
+  font-size: 12px;
+  margin-top: 4px;
+  font-weight: 500;
+}
+
+.vm-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+
+/* ── Add Vehicle Button ── */
+.vm-add-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 24px;
+  background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  margin-bottom: 24px;
+  box-shadow: 0 4px 15px rgba(59, 130, 246, 0.35);
+}
+
+.vm-add-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(37, 99, 235, 0.4);
+}
+
+/* ── Form Card ── */
+.vm-form-card {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  padding: 24px;
+  margin-bottom: 24px;
+}
+
+.vm-form-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.vm-form-title {
+  font-size: 17px;
+  font-weight: 600;
+  color: #0f172a;
+}
+
+.vm-form-close {
+  width: 34px;
+  height: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  color: #64748b;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.vm-form-close:hover {
+  background: #fee2e2;
+  border-color: #fecaca;
+  color: #ef4444;
+}
+
+.vm-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.vm-form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.vm-form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.vm-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: #374151;
+}
+
+.vm-input {
+  padding: 12px 14px;
+  background: white;
+  border: 2px solid #e2e8f0;
+  border-radius: 10px;
+  font-size: 14px;
+  color: #1e293b;
+  font-family: inherit;
+  transition: all 0.2s;
+}
+
+.vm-input:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.vm-input::placeholder {
+  color: #94a3b8;
+}
+
+.vm-select {
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  padding-right: 38px;
+  background-color: white;
+}
+
+.vm-textarea {
+  resize: vertical;
+  min-height: 70px;
+}
+
+.vm-form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 8px;
+  padding-top: 16px;
+  border-top: 1px solid #e2e8f0;
+}
+
+.vm-btn {
+  padding: 11px 22px;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: inherit;
+}
+
+.vm-btn-secondary {
+  background: white;
+  border: 1px solid #e2e8f0;
+  color: #475569;
+}
+
+.vm-btn-secondary:hover {
+  background: #f8fafc;
+  border-color: #cbd5e1;
+}
+
+.vm-btn-primary {
+  background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+  border: none;
+  color: white;
+  box-shadow: 0 2px 8px rgba(37, 99, 235, 0.25);
+}
+
+.vm-btn-primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.35);
+}
+
+/* ── Vehicle List Section ── */
+.vm-list-section {
+  margin-top: 4px;
+}
+
+.vm-section-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: #374151;
+  margin-bottom: 14px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.vm-count {
+  background: #e0f2fe;
+  color: #0369a1;
+  padding: 2px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+/* ── Empty State ── */
+.vm-empty {
+  background: #f8fafc;
+  border: 2px dashed #e2e8f0;
+  border-radius: 14px;
+  padding: 40px 30px;
+  text-align: center;
+}
+
+.vm-empty-icon {
+  width: 64px;
+  height: 64px;
+  background: #f1f5f9;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 16px;
+  color: #94a3b8;
+}
+
+.vm-empty-text {
+  font-size: 15px;
+  font-weight: 600;
+  color: #475569;
+  margin-bottom: 4px;
+}
+
+.vm-empty-subtext {
+  font-size: 13px;
+  color: #94a3b8;
+}
+
+/* ── Vehicle Grid ── */
+.vm-vehicle-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.vm-vehicle-card {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 16px 20px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  transition: all 0.2s;
+}
+
+.vm-vehicle-card:hover {
+  background: white;
+  border-color: #cbd5e1;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.vm-vehicle-icon {
+  width: 48px;
+  height: 48px;
+  background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #2563eb;
+  flex-shrink: 0;
+}
+
+.vm-vehicle-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.vm-vehicle-name {
+  font-size: 15px;
+  font-weight: 600;
+  color: #0f172a;
+  margin-bottom: 6px;
+}
+
+.vm-vehicle-year {
+  font-weight: 400;
+  color: #64748b;
+  margin-left: 4px;
+}
+
+.vm-vehicle-details {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.vm-vehicle-detail {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 12px;
+  color: #64748b;
+}
+
+.vm-vehicle-detail svg {
+  color: #94a3b8;
+}
+
+.vm-vehicle-actions {
+  display: flex;
+  gap: 6px;
+}
+
+.vm-action-btn {
+  width: 34px;
+  height: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.vm-action-edit {
+  color: #2563eb;
+}
+
+.vm-action-edit:hover {
+  background: #eff6ff;
+  border-color: #bfdbfe;
+}
+
+.vm-action-delete {
+  color: #ef4444;
+}
+
+.vm-action-delete:hover {
+  background: #fef2f2;
+  border-color: #fecaca;
+}
+
+/* ── Responsive ── */
+@media (max-width: 640px) {
+  .vm-overlay {
+    padding: 16px;
+    align-items: flex-end;
+  }
+
+  .vm-container {
+    max-height: 85vh;
+    border-radius: 20px 20px 0 0;
+    animation: vmSlideUpMobile 0.3s ease-out;
+  }
+
+  @keyframes vmSlideUpMobile {
+    from {
+      opacity: 0;
+      transform: translateY(100%);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .vm-header {
+    padding: 24px 20px 0;
+  }
+
+  .vm-content {
+    padding: 20px 20px 28px;
+  }
+
+  .vm-form-row {
+    grid-template-columns: 1fr;
+  }
+
+  .vm-vehicle-card {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .vm-vehicle-actions {
+    width: 100%;
+    justify-content: flex-end;
+  }
+
+  .vm-form-actions {
+    flex-direction: column;
+  }
+
+  .vm-btn {
+    width: 100%;
+    text-align: center;
+    justify-content: center;
+  }
+
+  .vm-title {
+    font-size: 22px;
+  }
+
+  .vm-back-btn {
+    padding: 8px 14px;
+    font-size: 13px;
+  }
+}

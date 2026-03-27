@@ -1,0 +1,316 @@
+/* =====================================================
+   BookAppointment.css — Floating Modal with Blur
+   ===================================================== */
+
+/* ── Overlay with blur ── */
+.ba-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(15, 23, 42, 0.4);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  animation: baFadeIn 0.3s ease-out;
+}
+
+@keyframes baFadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* ── Floating Modal Container ── */
+.ba-container {
+  background: #ffffff;
+  border-radius: 24px;
+  width: 100%;
+  max-width: 560px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 4px 24px rgba(59, 130, 246, 0.08), 0 25px 80px rgba(0, 0, 0, 0.2);
+  position: relative;
+  animation: baSlideUp 0.3s ease-out;
+  border: 1px solid rgba(59, 130, 246, 0.08);
+}
+
+/* Decorative gradient accent at top */
+.ba-container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #3b82f6 0%, #8b5cf6 50%, #ec4899 100%);
+  border-radius: 24px 24px 0 0;
+}
+
+@keyframes baSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* ── Header ── */
+.ba-header {
+  padding: 28px 28px 0;
+}
+
+.ba-back-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 18px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #475569;
+  cursor: pointer;
+  transition: all 0.2s;
+  margin-bottom: 20px;
+}
+
+.ba-back-btn:hover {
+  background: #f1f5f9;
+  border-color: #cbd5e1;
+  color: #1e293b;
+  transform: translateX(-2px);
+}
+
+.ba-header-content {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.ba-header-icon {
+  width: 52px;
+  height: 52px;
+  background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  flex-shrink: 0;
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+}
+
+.ba-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: #0f172a;
+  margin-bottom: 4px;
+  letter-spacing: -0.5px;
+}
+
+.ba-subtitle {
+  font-size: 14px;
+  color: #64748b;
+  line-height: 1.4;
+}
+
+/* ── Form ── */
+.ba-form {
+  padding: 24px 28px 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.ba-form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.ba-form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.ba-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #374151;
+}
+
+.ba-label svg {
+  color: #64748b;
+}
+
+.ba-input,
+.ba-select,
+.ba-textarea {
+  padding: 12px 14px;
+  background: #f8fafc;
+  border: 2px solid #e2e8f0;
+  border-radius: 10px;
+  font-size: 14px;
+  color: #1e293b;
+  font-family: inherit;
+  transition: all 0.2s;
+}
+
+.ba-input:focus,
+.ba-select:focus,
+.ba-textarea:focus {
+  outline: none;
+  border-color: #3b82f6;
+  background: white;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.ba-input::placeholder,
+.ba-textarea::placeholder {
+  color: #94a3b8;
+}
+
+.ba-select {
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  padding-right: 38px;
+  background-color: #f8fafc;
+}
+
+.ba-textarea {
+  resize: vertical;
+  min-height: 100px;
+  line-height: 1.5;
+}
+
+.ba-hint {
+  font-size: 12px;
+  color: #94a3b8;
+  margin-top: -4px;
+}
+
+/* ── Form Actions ── */
+.ba-form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 8px;
+  padding-top: 20px;
+  border-top: 1px solid #f1f5f9;
+}
+
+.ba-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 24px;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: inherit;
+}
+
+.ba-btn-secondary {
+  background: white;
+  border: 1px solid #e2e8f0;
+  color: #475569;
+}
+
+.ba-btn-secondary:hover {
+  background: #f8fafc;
+  border-color: #cbd5e1;
+}
+
+.ba-btn-primary {
+  background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+  border: none;
+  color: white;
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+}
+
+.ba-btn-primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(37, 99, 235, 0.4);
+}
+
+/* ── Responsive ── */
+@media (max-width: 640px) {
+  .ba-overlay {
+    padding: 16px;
+    align-items: flex-end;
+  }
+
+  .ba-container {
+    max-height: 90vh;
+    border-radius: 20px 20px 0 0;
+    animation: baSlideUpMobile 0.3s ease-out;
+  }
+
+  @keyframes baSlideUpMobile {
+    from {
+      opacity: 0;
+      transform: translateY(100%);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .ba-header {
+    padding: 24px 20px 0;
+  }
+
+  .ba-form {
+    padding: 20px 20px 28px;
+  }
+
+  .ba-form-row {
+    grid-template-columns: 1fr;
+  }
+
+  .ba-header-content {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .ba-title {
+    font-size: 20px;
+  }
+
+  .ba-form-actions {
+    flex-direction: column;
+  }
+
+  .ba-btn {
+    width: 100%;
+  }
+
+  .ba-back-btn {
+    padding: 8px 14px;
+    font-size: 13px;
+  }
+}

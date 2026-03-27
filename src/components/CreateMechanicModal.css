@@ -1,0 +1,330 @@
+/* =====================================================
+   CreateMechanicModal.css — Modal for Creating Mechanic
+   ===================================================== */
+
+/* ── Overlay with blur ── */
+.cmm-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(15, 23, 42, 0.4);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  animation: cmmFadeIn 0.3s ease-out;
+}
+
+@keyframes cmmFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* ── Modal Container ── */
+.cmm-container {
+  background: #ffffff;
+  border-radius: 24px;
+  width: 100%;
+  max-width: 480px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 4px 24px rgba(59, 130, 246, 0.08), 0 25px 80px rgba(0, 0, 0, 0.2);
+  position: relative;
+  animation: cmmSlideUp 0.3s ease-out;
+  border: 1px solid rgba(59, 130, 246, 0.08);
+}
+
+.cmm-container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #2563eb 0%, #7c3aed 50%, #2563eb 100%);
+  border-radius: 24px 24px 0 0;
+}
+
+@keyframes cmmSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* ── Header ── */
+.cmm-header {
+  padding: 28px 28px 0;
+}
+
+.cmm-back-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 18px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #475569;
+  cursor: pointer;
+  transition: all 0.2s;
+  margin-bottom: 20px;
+  font-family: inherit;
+}
+
+.cmm-back-btn:hover {
+  background: #f1f5f9;
+  border-color: #cbd5e1;
+  color: #1e293b;
+  transform: translateX(-2px);
+}
+
+.cmm-header-content {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.cmm-header-icon {
+  width: 52px;
+  height: 52px;
+  background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  flex-shrink: 0;
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+}
+
+.cmm-title {
+  font-size: 22px;
+  font-weight: 700;
+  color: #0f172a;
+  margin-bottom: 4px;
+  letter-spacing: -0.5px;
+}
+
+.cmm-subtitle {
+  font-size: 14px;
+  color: #64748b;
+  line-height: 1.4;
+}
+
+/* ── Form ── */
+.cmm-form {
+  padding: 24px 28px 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.cmm-form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.cmm-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #374151;
+}
+
+.cmm-label svg {
+  color: #64748b;
+}
+
+.cmm-input {
+  padding: 12px 14px;
+  background: #f8fafc;
+  border: 2px solid #e2e8f0;
+  border-radius: 10px;
+  font-size: 14px;
+  color: #1e293b;
+  font-family: inherit;
+  transition: all 0.2s;
+}
+
+.cmm-input:focus {
+  outline: none;
+  border-color: #3b82f6;
+  background: white;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.cmm-input::placeholder {
+  color: #94a3b8;
+}
+
+.cmm-input-error {
+  border-color: #ef4444;
+}
+
+.cmm-input-error:focus {
+  border-color: #ef4444;
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+}
+
+.cmm-error {
+  font-size: 12px;
+  color: #ef4444;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.cmm-hint {
+  font-size: 12px;
+  color: #94a3b8;
+}
+
+/* ── Form Actions ── */
+.cmm-form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 8px;
+  padding-top: 20px;
+  border-top: 1px solid #f1f5f9;
+}
+
+.cmm-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 24px;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: inherit;
+}
+
+.cmm-btn-secondary {
+  background: white;
+  border: 1px solid #e2e8f0;
+  color: #475569;
+}
+
+.cmm-btn-secondary:hover {
+  background: #f8fafc;
+  border-color: #cbd5e1;
+}
+
+.cmm-btn-primary {
+  background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+  border: none;
+  color: white;
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+}
+
+.cmm-btn-primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(37, 99, 235, 0.4);
+}
+
+.cmm-btn-primary:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* ── Spinner ── */
+.cmm-spinner {
+  width: 18px;
+  height: 18px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top-color: white;
+  border-radius: 50%;
+  animation: cmmSpin 0.8s linear infinite;
+}
+
+@keyframes cmmSpin {
+  to { transform: rotate(360deg); }
+}
+
+/* ── Success State ── */
+.cmm-success {
+  padding: 48px 28px;
+  text-align: center;
+}
+
+.cmm-success-icon {
+  width: 80px;
+  height: 80px;
+  background: linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #16a34a;
+  margin: 0 auto 20px;
+}
+
+.cmm-success h3 {
+  font-size: 20px;
+  font-weight: 700;
+  color: #0f172a;
+  margin-bottom: 8px;
+}
+
+.cmm-success p {
+  font-size: 14px;
+  color: #64748b;
+}
+
+/* ── Responsive ── */
+@media (max-width: 640px) {
+  .cmm-overlay {
+    padding: 16px;
+    align-items: flex-end;
+  }
+
+  .cmm-container {
+    max-height: 90vh;
+    border-radius: 20px 20px 0 0;
+  }
+
+  .cmm-header {
+    padding: 24px 20px 0;
+  }
+
+  .cmm-form {
+    padding: 20px 20px 28px;
+  }
+
+  .cmm-header-content {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .cmm-title {
+    font-size: 18px;
+  }
+
+  .cmm-form-actions {
+    flex-direction: column;
+  }
+
+  .cmm-btn {
+    width: 100%;
+  }
+}

@@ -80,6 +80,11 @@ const UploadPhotoPage = () => {
     try {
       const result = await uploadProfilePhoto(file, token);
       setSuccess(result?.message || 'Photo uploaded successfully.');
+
+      // Navigate to profile page after 1 second to show the success message
+      setTimeout(() => {
+        navigate('/profile');
+      }, 1000);
     } catch (err) {
       setError(err.message || 'Failed to upload photo.');
     } finally {
