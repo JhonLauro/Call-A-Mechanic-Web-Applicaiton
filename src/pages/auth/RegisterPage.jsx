@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
-import Snackbar from '../components/Snackbar';
+import { useAuth } from '../../context/AuthContext';
+import Snackbar from '../../components/Snackbar';
 import './AuthPages.css';
 
 const validateEmail = (email) =>

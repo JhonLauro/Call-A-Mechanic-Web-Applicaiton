@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { createAppointment } from '../services/appointmentService';
 import './BookAppointment.css';
@@ -16,6 +16,7 @@ const BookAppointment = ({ isOpen, onClose, onSuccess, vehicles = [] }) => {
   const [submitSuccess, setSubmitSuccess] = useState(false);
   const [errors, setErrors] = useState({});
   const [apiError, setApiError] = useState('');
+  const closeTimerRef = useRef(null);
 
   // Vehicle validation helper
   const hasVehicles = vehicles && vehicles.length > 0;
@@ -31,6 +32,31 @@ const BookAppointment = ({ isOpen, onClose, onSuccess, vehicles = [] }) => {
     'General Checkup',
     'Other',
   ];
+
+  useEffect(() => {
+    return () => {
+      if (closeTimerRef.current) {
+        clearTimeout(closeTimerRef.current);
+      }
+    };
+  }, []);
+
+  const resetBookingState = () => {
+    setFormData({ serviceType: '', vehicleInfo: '', date: '', time: '', problemDescription: '' });
+    setSubmitSuccess(false);
+    setErrors({});
+    setApiError('');
+  };
+
+  const finishBooking = () => {
+    if (closeTimerRef.current) {
+      clearTimeout(closeTimerRef.current);
+      closeTimerRef.current = null;
+    }
+    resetBookingState();
+    onClose();
+    if (onSuccess) onSuccess();
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -85,13 +111,7 @@ const BookAppointment = ({ isOpen, onClose, onSuccess, vehicles = [] }) => {
 
       setSubmitSuccess(true);
 
-      // Reset and close after success
-      setTimeout(() => {
-        setFormData({ serviceType: '', vehicleInfo: '', date: '', time: '', problemDescription: '' });
-        setSubmitSuccess(false);
-        onClose();
-        if (onSuccess) onSuccess();
-      }, 2000);
+      closeTimerRef.current = setTimeout(finishBooking, 2400);
     } catch (err) {
       setApiError(err.message || 'Failed to book appointment. Please try again.');
     } finally {
@@ -142,15 +162,18 @@ const BookAppointment = ({ isOpen, onClose, onSuccess, vehicles = [] }) => {
         {submitSuccess ? (
           <div className="ba-success">
             <div className="ba-success-icon">
-              <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <svg xmlns="http://www.w3.org/2000/svg" width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                 <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
                 <polyline points="22 4 12 14.01 9 11.01"/>
               </svg>
             </div>
-            <h2 className="ba-success-title">Appointment Booked Successfully!</h2>
+            <h2 className="ba-success-title">Appointment booked</h2>
             <p className="ba-success-message">
-              Your service request has been submitted. We'll assign a mechanic and notify you shortly.
+              Your request was submitted successfully. A mechanic will be assigned once the shop reviews the booking.
             </p>
+            <button type="button" className="ba-btn ba-btn-primary ba-success-btn" onClick={finishBooking}>
+              Back to Dashboard
+            </button>
           </div>
         ) : (
           <form className="ba-form" onSubmit={handleSubmit}>

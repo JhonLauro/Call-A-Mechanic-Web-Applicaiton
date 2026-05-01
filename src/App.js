@@ -1,16 +1,49 @@
 import React from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { useAuth } from './context/AuthContext';
-import LandingPage from './pages/LandingPage';
-import LoginPage from './pages/LoginPage';
-import RegisterPage from './pages/RegisterPage';
-import DashboardPage from './pages/DashboardPage';
-import ProfilePage from './pages/ProfilePage';
-import AdminProfilePage from './pages/AdminProfilePage';
-import EditProfilePage from './pages/EditProfilePage';
-import EditPasswordPage from './pages/EditPasswordPage';
-import UploadPhotoPage from './pages/UploadPhotoPage';
-import UserRegistryPage from './pages/UserRegistryPage';
+import LandingPage from './pages/landing/LandingPage';
+import LoginPage from './pages/auth/LoginPage';
+import RegisterPage from './pages/auth/RegisterPage';
+import DashboardPage from './pages/dashboard/DashboardPage';
+import ClientDashboard from './pages/client/ClientDashboard';
+import AdminDashboard from './pages/admin/AdminDashboard';
+import MechanicDashboard from './pages/mechanic/MechanicDashboard';
+import ProfilePage from './pages/profile/ProfilePage';
+import AdminProfilePage from './pages/admin/AdminProfilePage';
+import EditProfilePage from './pages/profile/EditProfilePage';
+import EditPasswordPage from './pages/profile/EditPasswordPage';
+import UploadPhotoPage from './pages/profile/UploadPhotoPage';
+import UserRegistryPage from './pages/admin/UserRegistryPage';
+
+const VALID_ROLES = ['CLIENT', 'ADMIN', 'MECHANIC'];
+
+const getNormalizedRole = (user) => {
+  const role = String(user?.role || 'CLIENT').toUpperCase();
+  return VALID_ROLES.includes(role) ? role : 'CLIENT';
+};
+
+const getDashboardPathForRole = (user) => {
+  const role = getNormalizedRole(user);
+  if (role === 'ADMIN') return '/admin/dashboard';
+  if (role === 'MECHANIC') return '/mechanic/dashboard';
+  return '/client/dashboard';
+};
+
+const LoadingScreen = () => (
+  <div
+    style={{
+      minHeight: '100vh',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      fontFamily: 'system-ui, sans-serif',
+      color: '#6b7280',
+      fontSize: '15px',
+    }}
+  >
+    Loading...
+  </div>
+);
 
 /**
  * ProtectedRoute — redirects unauthenticated users to /login.
@@ -19,23 +52,23 @@ import UserRegistryPage from './pages/UserRegistryPage';
 const ProtectedRoute = ({ children }) => {
   const { isAuthenticated, loading } = useAuth();
 
-  if (loading) {
-    return (
-      <div style={{
-        minHeight: '100vh',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        fontFamily: 'system-ui, sans-serif',
-        color: '#6b7280',
-        fontSize: '15px',
-      }}>
-        Loading…
-      </div>
-    );
-  }
+  if (loading) return <LoadingScreen />;
 
   return isAuthenticated ? children : <Navigate to="/login" replace />;
+};
+
+/**
+ * RoleProtectedRoute — allows only specific roles and redirects others
+ * to their own role dashboard.
+ */
+const RoleProtectedRoute = ({ allowedRoles, children }) => {
+  const { isAuthenticated, loading, user } = useAuth();
+
+  if (loading) return <LoadingScreen />;
+  if (!isAuthenticated) return <Navigate to="/login" replace />;
+
+  const role = getNormalizedRole(user);
+  return allowedRoles.includes(role) ? children : <Navigate to={getDashboardPathForRole(user)} replace />;
 };
 
 function App() {
@@ -57,6 +90,30 @@ function App() {
           }
         />
         <Route
+          path="/client/dashboard"
+          element={
+            <RoleProtectedRoute allowedRoles={['CLIENT']}>
+              <ClientDashboard />
+            </RoleProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/dashboard"
+          element={
+            <RoleProtectedRoute allowedRoles={['ADMIN']}>
+              <AdminDashboard />
+            </RoleProtectedRoute>
+          }
+        />
+        <Route
+          path="/mechanic/dashboard"
+          element={
+            <RoleProtectedRoute allowedRoles={['MECHANIC']}>
+              <MechanicDashboard />
+            </RoleProtectedRoute>
+          }
+        />
+        <Route
           path="/profile"
           element={
             <ProtectedRoute>
@@ -67,17 +124,17 @@ function App() {
         <Route
           path="/admin/profile"
           element={
-            <ProtectedRoute>
+            <RoleProtectedRoute allowedRoles={['ADMIN']}>
               <AdminProfilePage />
-            </ProtectedRoute>
+            </RoleProtectedRoute>
           }
         />
         <Route
           path="/admin/users"
           element={
-            <ProtectedRoute>
+            <RoleProtectedRoute allowedRoles={['ADMIN']}>
               <UserRegistryPage />
-            </ProtectedRoute>
+            </RoleProtectedRoute>
           }
         />
         <Route

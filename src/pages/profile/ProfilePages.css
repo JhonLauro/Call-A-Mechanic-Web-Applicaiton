@@ -442,6 +442,21 @@
 }
 
 /* ── My Vehicles Section ── */
+.pp-vehicles-title-group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.pp-vehicles-kicker {
+  margin: 0;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #3b82f6;
+}
+
 .pp-vehicles-list {
   display: flex;
   flex-direction: column;
@@ -494,6 +509,16 @@
   gap: 6px;
   font-size: 13px;
   color: #64748b;
+  flex-wrap: wrap;
+}
+
+.pp-vehicle-summary {
+  margin: 6px 0 0 0;
+  font-size: 14px;
+  color: #64748b;
+  display: flex;
+  align-items: center;
+  gap: 8px;
   flex-wrap: wrap;
 }
 

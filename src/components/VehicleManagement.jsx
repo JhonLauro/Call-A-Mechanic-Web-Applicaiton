@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { getVehicles, createVehicle, deleteVehicle } from '../services/vehicleService';
 import './VehicleManagement.css';
 
 const VehicleManagement = ({ isOpen, onClose, onVehicleChange }) => {
-  const { user, token } = useAuth();
+  const { token } = useAuth();
   const [showAddForm, setShowAddForm] = useState(false);
   const [vehicles, setVehicles] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -21,14 +21,7 @@ const VehicleManagement = ({ isOpen, onClose, onVehicleChange }) => {
   const [errors, setErrors] = useState({});
   const [apiError, setApiError] = useState('');
 
-  // Load vehicles from API
-  useEffect(() => {
-    if (isOpen && token) {
-      loadVehicles();
-    }
-  }, [isOpen, token]);
-
-  const loadVehicles = async () => {
+  const loadVehicles = useCallback(async () => {
     setLoading(true);
     setApiError('');
     try {
@@ -40,7 +33,14 @@ const VehicleManagement = ({ isOpen, onClose, onVehicleChange }) => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [token, onVehicleChange]);
+
+  // Load vehicles from API
+  useEffect(() => {
+    if (isOpen && token) {
+      loadVehicles();
+    }
+  }, [isOpen, token, loadVehicles]);
 
   if (!isOpen) return null;
 

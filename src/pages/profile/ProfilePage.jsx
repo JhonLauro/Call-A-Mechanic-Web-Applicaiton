@@ -1,9 +1,10 @@
 import React, { useEffect, useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
-import { getProfile, updateProfile, updatePassword, uploadProfilePhoto } from '../services/profileService';
-import VehicleManagement from '../components/VehicleManagement';
-import Snackbar from '../components/Snackbar';
+import { useAuth } from '../../context/AuthContext';
+import { getProfile, updateProfile, updatePassword, uploadProfilePhoto } from '../../services/profileService';
+import { getVehicles } from '../../services/vehicleService';
+import VehicleManagement from '../../components/VehicleManagement';
+import Snackbar from '../../components/Snackbar';
 import './ProfilePages.css';
 
 const toInitials = (name = '') =>
@@ -27,10 +28,8 @@ const ProfilePage = () => {
   const [isChangingPassword, setIsChangingPassword] = useState(false);
   const [showVehicleManagement, setShowVehicleManagement] = useState(false);
 
-  // Mock vehicles data - replace with API call later
-  const [vehicles] = useState([
-    { id: 1, make: 'Honda', model: 'Civic', year: '2019', plateNumber: 'ABC 1234', color: 'Silver' },
-  ]);
+  const [vehicles, setVehicles] = useState([]);
+  const [vehiclesLoading, setVehiclesLoading] = useState(false);
 
   // Form states
   const [profileForm, setProfileForm] = useState({ fullName: '', phoneNumber: '' });
@@ -39,6 +38,9 @@ const ProfilePage = () => {
   // Feedback states
   const [saving, setSaving] = useState(false);
   const [snackbar, setSnackbar] = useState({ open: false, message: '', type: 'success' });
+
+  const normalizedRole = String(profile?.role || user?.role || '').toUpperCase();
+  const canManageVehicles = normalizedRole === 'CLIENT';
 
   // Load profile
   useEffect(() => {
@@ -66,6 +68,33 @@ const ProfilePage = () => {
     loadProfile();
     return () => { isMounted = false; };
   }, [token, user]);
+
+  useEffect(() => {
+    let isMounted = true;
+
+    const loadVehicles = async () => {
+      if (!token || !canManageVehicles) {
+        setVehicles([]);
+        return;
+      }
+
+      setVehiclesLoading(true);
+      try {
+        const data = await getVehicles(token);
+        if (isMounted) setVehicles(Array.isArray(data) ? data : []);
+      } catch (err) {
+        if (isMounted) {
+          setVehicles([]);
+          showSnackbar(err.message || 'Failed to load vehicles.', 'error');
+        }
+      } finally {
+        if (isMounted) setVehiclesLoading(false);
+      }
+    };
+
+    loadVehicles();
+    return () => { isMounted = false; };
+  }, [token, canManageVehicles]);
 
   const photoSrc = useMemo(
     () => profile?.photoUrl || profile?.profilePhotoUrl || profile?.avatarUrl || '',
@@ -379,69 +408,86 @@ const ProfilePage = () => {
             )}
           </div>
 
-          {/* My Vehicles Card */}
-          <div className="pp-card">
-            <div className="pp-card-header">
-              <h3 className="pp-card-title">My Vehicles</h3>
-              <button className="pp-edit-btn" onClick={() => setShowVehicleManagement(true)}>
-                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
-                </svg>
-                Add Vehicle
-              </button>
-            </div>
-
-            {vehicles.length > 0 ? (
-              <div className="pp-vehicles-list">
-                {vehicles.map((vehicle) => (
-                  <div key={vehicle.id} className="pp-vehicle-card">
-                    <div className="pp-vehicle-icon">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                        <rect x="1" y="3" width="15" height="13" rx="2"/>
-                        <path d="M16 8h4l3 3v5h-7V8z"/>
-                        <circle cx="5.5" cy="18.5" r="2.5"/>
-                        <circle cx="18.5" cy="18.5" r="2.5"/>
-                      </svg>
-                    </div>
-                    <div className="pp-vehicle-details">
-                      <h4 className="pp-vehicle-name">{vehicle.make} {vehicle.model}</h4>
-                      <div className="pp-vehicle-meta">
-                        <span>{vehicle.year}</span>
-                        <span className="pp-vehicle-separator">•</span>
-                        <span>{vehicle.plateNumber}</span>
-                        {vehicle.color && (
-                          <>
-                            <span className="pp-vehicle-separator">•</span>
-                            <span>{vehicle.color}</span>
-                          </>
-                        )}
-                      </div>
-                    </div>
-                    <button className="pp-vehicle-action" onClick={() => setShowVehicleManagement(true)}>
-                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                        <circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/>
-                      </svg>
-                    </button>
-                  </div>
-                ))}
-              </div>
-            ) : (
-              <div className="pp-vehicles-empty">
-                <div className="pp-vehicles-empty-icon">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                    <rect x="1" y="3" width="15" height="13" rx="2"/>
-                    <path d="M16 8h4l3 3v5h-7V8z"/>
-                    <circle cx="5.5" cy="18.5" r="2.5"/>
-                    <circle cx="18.5" cy="18.5" r="2.5"/>
-                  </svg>
+          {canManageVehicles && (
+            <div className="pp-card">
+              <div className="pp-card-header">
+                <div className="pp-vehicles-title-group">
+                  <p className="pp-vehicles-kicker">Garage</p>
+                  <h3 className="pp-card-title">My Vehicles</h3>
                 </div>
-                <p className="pp-vehicles-empty-text">No vehicles registered yet</p>
-                <button className="pp-btn pp-btn-primary" onClick={() => setShowVehicleManagement(true)}>
-                  Register Your First Vehicle
+                <button className="pp-edit-btn" onClick={() => setShowVehicleManagement(true)}>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+                  </svg>
+                  Add Vehicle
                 </button>
               </div>
-            )}
-          </div>
+
+              {vehiclesLoading ? (
+                <div className="pp-vehicles-empty">
+                  <p className="pp-vehicles-empty-text">Loading vehicles...</p>
+                </div>
+              ) : vehicles.length > 0 ? (
+                <div className="pp-vehicles-list">
+                  {vehicles.map((vehicle) => (
+                    <div key={vehicle.id} className="pp-vehicle-card">
+                      <div className="pp-vehicle-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                          <rect x="1" y="3" width="15" height="13" rx="2"/>
+                          <path d="M16 8h4l3 3v5h-7V8z"/>
+                          <circle cx="5.5" cy="18.5" r="2.5"/>
+                          <circle cx="18.5" cy="18.5" r="2.5"/>
+                        </svg>
+                      </div>
+                      <div className="pp-vehicle-details">
+                        <h4 className="pp-vehicle-name">{vehicle.make} {vehicle.model}</h4>
+                        <div className="pp-vehicle-meta">
+                          <span>{vehicle.year}</span>
+                          {vehicle.color && (
+                            <>
+                              <span className="pp-vehicle-separator">•</span>
+                              <span>{vehicle.color}</span>
+                            </>
+                          )}
+                          {vehicle.type && (
+                            <>
+                              <span className="pp-vehicle-separator">•</span>
+                              <span>{vehicle.type}</span>
+                            </>
+                          )}
+                        </div>
+                        <p className="pp-vehicle-summary">
+                          Plate: {vehicle.plateNumber || 'N/A'}
+                          <span className="pp-vehicle-separator">•</span>
+                          Recall: {vehicle.recallStatus || 'No Recall'}
+                        </p>
+                      </div>
+                      <button className="pp-vehicle-action" onClick={() => setShowVehicleManagement(true)}>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                          <circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/>
+                        </svg>
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div className="pp-vehicles-empty">
+                  <div className="pp-vehicles-empty-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                      <rect x="1" y="3" width="15" height="13" rx="2"/>
+                      <path d="M16 8h4l3 3v5h-7V8z"/>
+                      <circle cx="5.5" cy="18.5" r="2.5"/>
+                      <circle cx="18.5" cy="18.5" r="2.5"/>
+                    </svg>
+                  </div>
+                  <p className="pp-vehicles-empty-text">No vehicles registered yet</p>
+                  <button className="pp-btn pp-btn-primary" onClick={() => setShowVehicleManagement(true)}>
+                    Register Your First Vehicle
+                  </button>
+                </div>
+              )}
+            </div>
+          )}
         </main>
       </div>
 
@@ -449,6 +495,7 @@ const ProfilePage = () => {
       <VehicleManagement
         isOpen={showVehicleManagement}
         onClose={() => setShowVehicleManagement(false)}
+        onVehicleChange={(updatedVehicles) => setVehicles(updatedVehicles)}
       />
 
       <Snackbar

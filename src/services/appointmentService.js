@@ -40,7 +40,7 @@ export const createAppointment = (data, token) =>
 /**
  * Update appointment status (mechanic or admin only)
  * @param {number} appointmentId - The appointment ID
- * @param {string} status - "PENDING", "IN_PROGRESS", "COMPLETED", or "CANCELLED"
+ * @param {string} status - "PENDING", "IN_PROGRESS", or "FINISHED"
  */
 export const updateAppointmentStatus = (appointmentId, status, token) =>
   requestApi(

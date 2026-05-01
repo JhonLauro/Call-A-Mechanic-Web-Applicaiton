@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
-import { getAppointments, updateAppointmentStatus } from '../services/appointmentService';
-import { getAllUsers, assignMechanic } from '../services/adminService';
-import CreateMechanicModal from '../components/CreateMechanicModal';
-import AppointmentDetailsPanel from '../components/AppointmentDetailsPanel';
-import Snackbar from '../components/Snackbar';
+import { useAuth } from '../../context/AuthContext';
+import { getAppointments, updateAppointmentStatus } from '../../services/appointmentService';
+import { getAllUsers, assignMechanic } from '../../services/adminService';
+import CreateMechanicModal from '../../components/CreateMechanicModal';
+import AppointmentDetailsPanel from '../../components/AppointmentDetailsPanel';
+import Snackbar from '../../components/Snackbar';
 import './AdminDashboard.css';
 
 const AdminDashboard = () => {
@@ -87,7 +87,7 @@ const AdminDashboard = () => {
     ).length,
     pendingJobs: appointments.filter(apt => apt.status === 'PENDING').length,
     inProgressJobs: appointments.filter(apt => apt.status === 'IN_PROGRESS').length,
-    finishedJobs: appointments.filter(apt => apt.status === 'COMPLETED').length,
+    finishedJobs: appointments.filter(apt => apt.status === 'FINISHED' || apt.status === 'COMPLETED').length,
     totalMechanics: mechanics.length,
   };
 
@@ -100,24 +100,23 @@ const AdminDashboard = () => {
       apt.clientName.toLowerCase().includes(searchQuery.toLowerCase()) ||
       String(apt.id).includes(searchQuery) ||
       apt.vehicle.toLowerCase().includes(searchQuery.toLowerCase());
-    const aptStatus = apt.status === 'FINISHED' ? 'COMPLETED' : apt.status;
-    const filterStatus = statusFilter === 'FINISHED' ? 'COMPLETED' : statusFilter;
-    const matchesStatus = statusFilter === 'ALL' || aptStatus === filterStatus || apt.status === statusFilter;
+    const matchesStatus = statusFilter === 'ALL' || apt.status === statusFilter;
     const matchesDate = !dateFilter || (apt.scheduledDate && apt.scheduledDate.startsWith(dateFilter));
     return matchesSearch && matchesStatus && matchesDate;
   });
+  const isFinishedStatus = (status) => status === 'FINISHED' || status === 'COMPLETED';
+  const activeAppointments = filteredAppointments.filter(apt => !isFinishedStatus(apt.status));
+  const finishedAppointments = filteredAppointments.filter(apt => isFinishedStatus(apt.status));
 
   // Update appointment status
   const handleStatusUpdate = async (appointmentId, newStatus) => {
     try {
-      // Map FINISHED to COMPLETED for API
-      const apiStatus = newStatus === 'FINISHED' ? 'COMPLETED' : newStatus;
-      await updateAppointmentStatus(appointmentId, apiStatus, token);
+      await updateAppointmentStatus(appointmentId, newStatus, token);
 
       // Update local state
       setAppointments(prev =>
         prev.map(apt =>
-          apt.id === appointmentId ? { ...apt, status: apiStatus } : apt
+          apt.id === appointmentId ? { ...apt, status: newStatus } : apt
         )
       );
 
@@ -365,11 +364,11 @@ const AdminDashboard = () => {
           </button>
         </div>
 
-        {/* Master Service Queue */}
+        {/* Active Service Queue */}
         <div className="ad-section">
           <div className="ad-section-header">
-            <h2 className="ad-section-title">Master Service Queue</h2>
-            <span className="ad-section-count">{filteredAppointments.length} appointments</span>
+            <h2 className="ad-section-title">Active Service Queue</h2>
+            <span className="ad-section-count">{activeAppointments.length} appointments</span>
           </div>
 
           {/* Filters */}
@@ -425,7 +424,7 @@ const AdminDashboard = () => {
                 </tr>
               </thead>
               <tbody>
-                {filteredAppointments.map((appointment) => (
+                {activeAppointments.map((appointment) => (
                   <tr key={appointment.id}>
                     <td className="ad-table-jobid">#{appointment.id}</td>
                     <td className="ad-table-client">{appointment.clientName}</td>
@@ -455,13 +454,78 @@ const AdminDashboard = () => {
                 ))}
               </tbody>
             </table>
-            {filteredAppointments.length === 0 && (
+            {activeAppointments.length === 0 && (
               <div className="ad-no-results">
                 <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
                   <circle cx="11" cy="11" r="8"/>
                   <line x1="21" y1="21" x2="16.65" y2="16.65"/>
                 </svg>
-                <p>No appointments found matching your filters</p>
+                <p>No active appointments found matching your filters</p>
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* Finished Service Records */}
+        <div className="ad-section">
+          <div className="ad-section-header">
+            <h2 className="ad-section-title">Finished Service Records</h2>
+            <span className="ad-section-count">{finishedAppointments.length} appointments</span>
+          </div>
+
+          <div className="ad-table-container">
+            <table className="ad-table">
+              <thead>
+                <tr>
+                  <th>JOB ID</th>
+                  <th>CLIENT</th>
+                  <th>CONTACT</th>
+                  <th>VEHICLE</th>
+                  <th>CAR ISSUE</th>
+                  <th>DATE</th>
+                  <th>MECHANIC</th>
+                  <th>STATUS</th>
+                  <th>ACTION</th>
+                </tr>
+              </thead>
+              <tbody>
+                {finishedAppointments.map((appointment) => (
+                  <tr key={`finished-${appointment.id}`}>
+                    <td className="ad-table-jobid">#{appointment.id}</td>
+                    <td className="ad-table-client">{appointment.clientName}</td>
+                    <td>{appointment.contactNumber}</td>
+                    <td>{appointment.vehicle}</td>
+                    <td className="ad-table-issue">{appointment.carIssue}</td>
+                    <td>{appointment.appointmentDate}</td>
+                    <td>
+                      <span className={appointment.mechanic === 'Unassigned' ? 'ad-unassigned' : ''}>
+                        {appointment.mechanic}
+                      </span>
+                    </td>
+                    <td>
+                      <span className={`ad-table-status ${getStatusBadgeClass(appointment.status)}`}>
+                        {formatStatus(appointment.status)}
+                      </span>
+                    </td>
+                    <td>
+                      <button
+                        className="ad-view-btn"
+                        onClick={() => setSelectedAppointment(appointment)}
+                      >
+                        View Details
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+            {finishedAppointments.length === 0 && (
+              <div className="ad-no-results">
+                <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                  <circle cx="11" cy="11" r="8"/>
+                  <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                </svg>
+                <p>No finished appointments found matching your filters</p>
               </div>
             )}
           </div>

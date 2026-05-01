@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
-import { getAppointments } from '../services/appointmentService';
-import { getVehicles } from '../services/vehicleService';
-import VehicleManagement from '../components/VehicleManagement';
-import BookAppointment from '../components/BookAppointment';
-import Snackbar from '../components/Snackbar';
+import { useAuth } from '../../context/AuthContext';
+import { getAppointments } from '../../services/appointmentService';
+import { getVehicles } from '../../services/vehicleService';
+import VehicleManagement from '../../components/VehicleManagement';
+import BookAppointment from '../../components/BookAppointment';
+import Snackbar from '../../components/Snackbar';
 import './ClientDashboard.css';
 
 const ClientDashboard = () => {
@@ -68,7 +68,7 @@ const ClientDashboard = () => {
     apt.status === 'PENDING' || apt.status === 'IN_PROGRESS'
   );
   const completedAppointments = appointments.filter(apt =>
-    apt.status === 'COMPLETED'
+    apt.status === 'FINISHED' || apt.status === 'COMPLETED'
   );
 
   const stats = {
@@ -100,7 +100,7 @@ const ClientDashboard = () => {
     vehicle: apt.vehicleInfo || '-',
     description: apt.problemDescription || apt.serviceType || '-',
     status: apt.status === 'IN_PROGRESS' ? 'In Progress'
-      : apt.status === 'COMPLETED' ? 'Completed'
+      : apt.status === 'FINISHED' || apt.status === 'COMPLETED' ? 'Finished'
       : apt.status === 'CANCELLED' ? 'Cancelled'
       : 'Pending',
   }));

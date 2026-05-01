@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
-import { getAllUsers, deleteUser } from '../services/adminService';
-import Snackbar from '../components/Snackbar';
+import { useAuth } from '../../context/AuthContext';
+import { getAllUsers, deleteUser } from '../../services/adminService';
+import Snackbar from '../../components/Snackbar';
 import './UserRegistryPage.css';
 
 const UserRegistryPage = () => {
