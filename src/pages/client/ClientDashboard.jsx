@@ -3,13 +3,15 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { getAppointments } from '../../services/appointmentService';
 import { getVehicles } from '../../services/vehicleService';
+import { getProfile } from '../../services/profileService';
 import VehicleManagement from '../../components/VehicleManagement';
 import BookAppointment from '../../components/BookAppointment';
 import Snackbar from '../../components/Snackbar';
+import LoadingScreen from '../../components/LoadingScreen';
 import './ClientDashboard.css';
 
 const ClientDashboard = () => {
-  const { user, token, logout } = useAuth();
+  const { user, token, logout, updateUser } = useAuth();
   const navigate = useNavigate();
   const [showUserMenu, setShowUserMenu] = useState(false);
   const [showVehicleManagement, setShowVehicleManagement] = useState(false);
@@ -44,30 +46,52 @@ const ClientDashboard = () => {
   }, [token]);
 
   // Load appointments
-  const loadAppointments = useCallback(async () => {
+  const loadAppointments = useCallback(async ({ silent = false } = {}) => {
     if (!token) return;
 
-    setLoading(true);
+    if (!silent) setLoading(true);
     try {
       const data = await getAppointments(token);
       setAppointments(data || []);
     } catch (err) {
-      showMessage(err.message || 'Failed to load appointments.', 'error');
+      if (!silent) showMessage(err.message || 'Failed to load appointments.', 'error');
     } finally {
-      setLoading(false);
+      if (!silent) setLoading(false);
     }
   }, [token]);
 
   useEffect(() => {
     loadAppointments();
     loadVehicles();
-  }, [loadAppointments, loadVehicles]);
+    if (token) {
+      getProfile(token)
+        .then((profileData) => {
+          if (profileData) updateUser(profileData);
+        })
+        .catch(() => {});
+    }
+    const refreshTimer = setInterval(() => {
+      loadAppointments({ silent: true });
+      loadVehicles();
+    }, 30000);
+
+    return () => clearInterval(refreshTimer);
+  }, [loadAppointments, loadVehicles, token, updateUser]);
+
+  const sortAppointmentsNewestFirst = (a, b) => {
+    const dateA = Date.parse(a.scheduledDate || '') || 0;
+    const dateB = Date.parse(b.scheduledDate || '') || 0;
+    if (dateA !== dateB) return dateB - dateA;
+    return Number(b.id) - Number(a.id);
+  };
+
+  const sortedAppointments = [...appointments].sort(sortAppointmentsNewestFirst);
 
   // Calculate stats from real data
-  const activeAppointments = appointments.filter(apt =>
+  const activeAppointments = sortedAppointments.filter(apt =>
     apt.status === 'PENDING' || apt.status === 'IN_PROGRESS'
   );
-  const completedAppointments = appointments.filter(apt =>
+  const completedAppointments = sortedAppointments.filter(apt =>
     apt.status === 'FINISHED' || apt.status === 'COMPLETED'
   );
 
@@ -92,7 +116,7 @@ const ClientDashboard = () => {
   } : null;
 
   // Service history from real appointments
-  const serviceHistory = appointments.map(apt => ({
+  const serviceHistory = sortedAppointments.map(apt => ({
     jobId: `#${apt.id}`,
     date: apt.scheduledDate
       ? new Date(apt.scheduledDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
@@ -112,6 +136,7 @@ const ClientDashboard = () => {
 
   const userName = user?.fullName || 'User';
   const userInitials = userName.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2);
+  const userPhoto = user?.photoUrl || user?.profilePhotoUrl || user?.avatarUrl || '';
 
   return (
     <div className="client-dashboard">
@@ -144,7 +169,9 @@ const ClientDashboard = () => {
               className="cd-user-btn"
               onClick={() => setShowUserMenu(!showUserMenu)}
             >
-              <div className="cd-user-avatar">{userInitials}</div>
+              <div className={`cd-user-avatar ${userPhoto ? 'cd-user-avatar-photo' : ''}`}>
+                {userPhoto ? <img src={userPhoto} alt={userName} /> : userInitials}
+              </div>
               <span className="cd-user-name">{userName}</span>
               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <polyline points="6 9 12 15 18 9"/>
@@ -327,8 +354,8 @@ const ClientDashboard = () => {
                   ))
                 ) : (
                   <tr>
-                    <td colSpan="5" style={{ textAlign: 'center', padding: '2rem', color: '#6b7280' }}>
-                      {loading ? 'Loading...' : 'No service history yet. Book your first appointment!'}
+                    <td colSpan="5" style={{ textAlign: 'center', padding: loading ? '0' : '2rem', color: '#6b7280' }}>
+                      {loading ? <LoadingScreen compact /> : 'No service history yet. Book your first appointment!'}
                     </td>
                   </tr>
                 )}

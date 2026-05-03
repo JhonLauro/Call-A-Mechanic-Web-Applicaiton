@@ -6,8 +6,17 @@
 
 .admin-profile {
   min-height: 100vh;
-  background: #f8fafc;
   font-family: 'Inter', system-ui, sans-serif;
+}
+
+.ap-loading {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #64748b;
+  font-size: 15px;
+  font-weight: 600;
 }
 
 /* ── Header ── */
@@ -167,7 +176,8 @@
 
 .ap-profile-avatar {
   object-fit: cover;
-  border: 4px solid #e2e8f0;
+  border: 4px solid #ffffff;
+  box-shadow: 0 0 0 2px #8ea8d8;
 }
 
 .ap-profile-avatar-placeholder {
@@ -178,7 +188,8 @@
   justify-content: center;
   font-size: 36px;
   font-weight: 700;
-  border: 4px solid #c4b5fd;
+  border: 4px solid #ffffff;
+  box-shadow: 0 0 0 2px #8ea8d8;
 }
 
 .ap-avatar-edit-btn {
@@ -369,6 +380,13 @@
   border-color: #3b82f6;
   background: white;
   box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.ap-form-group input:disabled {
+  color: #64748b;
+  cursor: not-allowed;
+  background: #eef4ff;
+  border-color: #dbe7f8;
 }
 
 .ap-form-group input::placeholder {

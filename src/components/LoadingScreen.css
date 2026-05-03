@@ -1,0 +1,83 @@
+.cam-loader {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+  background: radial-gradient(circle at 50% 38%, rgba(37, 99, 235, 0.12), transparent 32%),
+    linear-gradient(180deg, #eef5ff 0%, #f8fbff 100%);
+}
+
+.cam-loader-compact {
+  min-height: 128px;
+  background: transparent;
+}
+
+.cam-loader-mark {
+  position: relative;
+  width: 76px;
+  height: 76px;
+  display: grid;
+  place-items: center;
+}
+
+.cam-loader-ring {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 3px solid rgba(37, 99, 235, 0.14);
+  border-top-color: #2563eb;
+  animation: camSpin 0.8s linear infinite;
+}
+
+.cam-loader-icon {
+  width: 52px;
+  height: 52px;
+  display: grid;
+  place-items: center;
+  border-radius: 16px;
+  background: #2563eb;
+  color: #ffffff;
+  box-shadow: 0 14px 28px rgba(37, 99, 235, 0.22);
+}
+
+.cam-loader-bars {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.cam-loader-bars span {
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  background: #2563eb;
+  animation: camPulse 0.85s ease-in-out infinite;
+}
+
+.cam-loader-bars span:nth-child(2) {
+  animation-delay: 0.12s;
+}
+
+.cam-loader-bars span:nth-child(3) {
+  animation-delay: 0.24s;
+}
+
+@keyframes camSpin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes camPulse {
+  0%,
+  100% {
+    opacity: 0.35;
+    transform: scale(0.78);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}

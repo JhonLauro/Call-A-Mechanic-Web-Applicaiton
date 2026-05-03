@@ -10,6 +10,7 @@ const AppointmentDetailsPanel = ({
   isAdmin = false
 }) => {
   const [selectedMechanic, setSelectedMechanic] = useState('');
+  const [isMechanicMenuOpen, setIsMechanicMenuOpen] = useState(false);
 
   if (!appointment) return null;
 
@@ -45,8 +46,13 @@ const AppointmentDetailsPanel = ({
     if (selectedMechanic && onAssignMechanic) {
       onAssignMechanic(appointment.id, parseInt(selectedMechanic));
       setSelectedMechanic('');
+      setIsMechanicMenuOpen(false);
     }
   };
+
+  const selectedMechanicInfo = mechanics.find(
+    (mechanic) => String(mechanic.id) === String(selectedMechanic)
+  );
 
   return (
     <div className="adp-overlay" onClick={handleOverlayClick}>
@@ -141,18 +147,55 @@ const AppointmentDetailsPanel = ({
                   {appointment.mechanic === 'Unassigned' ? 'Assign Mechanic' : 'Reassign Mechanic'}
                 </label>
                 <div className="adp-assign-row">
-                  <select
-                    className="adp-mechanic-select"
-                    value={selectedMechanic}
-                    onChange={(e) => setSelectedMechanic(e.target.value)}
-                  >
-                    <option value="">Select a mechanic...</option>
-                    {mechanics.map((mechanic) => (
-                      <option key={mechanic.id} value={mechanic.id}>
-                        {mechanic.fullName} ({mechanic.mechanicId})
-                      </option>
-                    ))}
-                  </select>
+                  <div className="adp-mechanic-dropdown">
+                    <button
+                      type="button"
+                      className={`adp-mechanic-trigger ${isMechanicMenuOpen ? 'adp-open' : ''}`}
+                      onClick={() => setIsMechanicMenuOpen((open) => !open)}
+                    >
+                      <span className={selectedMechanicInfo ? 'adp-selected-mechanic' : 'adp-placeholder'}>
+                        {selectedMechanicInfo
+                          ? `${selectedMechanicInfo.fullName} (${selectedMechanicInfo.mechanicId})`
+                          : 'Select a mechanic...'}
+                      </span>
+                      <svg className="adp-chevron" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <polyline points="6 9 12 15 18 9" />
+                      </svg>
+                    </button>
+
+                    {isMechanicMenuOpen && (
+                      <div className="adp-mechanic-menu">
+                        {mechanics.length === 0 ? (
+                          <div className="adp-mechanic-empty">No mechanics available</div>
+                        ) : (
+                          mechanics.map((mechanic) => (
+                            <button
+                              type="button"
+                              key={mechanic.id}
+                              className={`adp-mechanic-option ${String(selectedMechanic) === String(mechanic.id) ? 'adp-selected' : ''}`}
+                              onClick={() => {
+                                setSelectedMechanic(String(mechanic.id));
+                                setIsMechanicMenuOpen(false);
+                              }}
+                            >
+                              <span className="adp-mechanic-avatar">
+                                {mechanic.fullName?.charAt(0)?.toUpperCase() || 'M'}
+                              </span>
+                              <span className="adp-mechanic-option-text">
+                                <span className="adp-mechanic-name">{mechanic.fullName}</span>
+                                <span className="adp-mechanic-id">{mechanic.mechanicId}</span>
+                              </span>
+                              {String(selectedMechanic) === String(mechanic.id) && (
+                                <svg className="adp-option-check" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                                  <polyline points="20 6 9 17 4 12" />
+                                </svg>
+                              )}
+                            </button>
+                          ))
+                        )}
+                      </div>
+                    )}
+                  </div>
                   <button
                     className="adp-assign-btn"
                     onClick={handleAssignMechanic}

@@ -3,13 +3,15 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { getAppointments, updateAppointmentStatus } from '../../services/appointmentService';
 import { getAllUsers, assignMechanic } from '../../services/adminService';
+import { getProfile } from '../../services/profileService';
 import CreateMechanicModal from '../../components/CreateMechanicModal';
 import AppointmentDetailsPanel from '../../components/AppointmentDetailsPanel';
 import Snackbar from '../../components/Snackbar';
+import LoadingScreen from '../../components/LoadingScreen';
 import './AdminDashboard.css';
 
 const AdminDashboard = () => {
-  const { user, token, logout } = useAuth();
+  const { user, token, logout, updateUser } = useAuth();
   const navigate = useNavigate();
   const [showUserMenu, setShowUserMenu] = useState(false);
   const [showCreateMechanic, setShowCreateMechanic] = useState(false);
@@ -36,10 +38,10 @@ const AdminDashboard = () => {
   };
 
   // Load appointments and users
-  const loadData = useCallback(async () => {
+  const loadData = useCallback(async ({ silent = false } = {}) => {
     if (!token) return;
 
-    setLoading(true);
+    if (!silent) setLoading(true);
     try {
       const [appointmentsData, usersData] = await Promise.all([
         getAppointments(token),
@@ -54,15 +56,27 @@ const AdminDashboard = () => {
         setMechanics(mechanicsList);
       }
     } catch (err) {
-      showMessage(err.message || 'Failed to load data.', 'error');
+      if (!silent) showMessage(err.message || 'Failed to load data.', 'error');
     } finally {
-      setLoading(false);
+      if (!silent) setLoading(false);
     }
   }, [token]);
 
   useEffect(() => {
     loadData();
-  }, [loadData]);
+    if (token) {
+      getProfile(token)
+        .then((profileData) => {
+          if (profileData) updateUser(profileData);
+        })
+        .catch(() => {});
+    }
+    const refreshTimer = setInterval(() => {
+      loadData({ silent: true });
+    }, 30000);
+
+    return () => clearInterval(refreshTimer);
+  }, [loadData, token, updateUser]);
 
   // Transform appointment data from API format to display format
   const transformAppointment = (apt) => ({
@@ -93,6 +107,7 @@ const AdminDashboard = () => {
 
   const userName = user?.fullName || 'Admin';
   const userInitials = userName.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2);
+  const userPhoto = user?.photoUrl || user?.profilePhotoUrl || user?.avatarUrl || '';
 
   // Filter appointments
   const filteredAppointments = appointments.map(transformAppointment).filter(apt => {
@@ -105,8 +120,18 @@ const AdminDashboard = () => {
     return matchesSearch && matchesStatus && matchesDate;
   });
   const isFinishedStatus = (status) => status === 'FINISHED' || status === 'COMPLETED';
-  const activeAppointments = filteredAppointments.filter(apt => !isFinishedStatus(apt.status));
-  const finishedAppointments = filteredAppointments.filter(apt => isFinishedStatus(apt.status));
+  const sortNewestFirst = (a, b) => {
+    const dateA = Date.parse(a.scheduledDate || '') || 0;
+    const dateB = Date.parse(b.scheduledDate || '') || 0;
+    if (dateA !== dateB) return dateB - dateA;
+    return Number(b.id) - Number(a.id);
+  };
+  const activeAppointments = filteredAppointments
+    .filter(apt => !isFinishedStatus(apt.status))
+    .sort(sortNewestFirst);
+  const finishedAppointments = filteredAppointments
+    .filter(apt => isFinishedStatus(apt.status))
+    .sort(sortNewestFirst);
 
   // Update appointment status
   const handleStatusUpdate = async (appointmentId, newStatus) => {
@@ -185,9 +210,7 @@ const AdminDashboard = () => {
   if (loading) {
     return (
       <div className="admin-dashboard">
-        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '100vh' }}>
-          <p>Loading dashboard...</p>
-        </div>
+        <LoadingScreen />
       </div>
     );
   }
@@ -218,7 +241,9 @@ const AdminDashboard = () => {
               className="ad-user-btn"
               onClick={() => setShowUserMenu(!showUserMenu)}
             >
-              <div className="ad-user-avatar">{userInitials}</div>
+              <div className={`ad-user-avatar ${userPhoto ? 'ad-user-avatar-photo' : ''}`}>
+                {userPhoto ? <img src={userPhoto} alt={userName} /> : userInitials}
+              </div>
               <span className="ad-user-name">{userName}</span>
               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <polyline points="6 9 12 15 18 9"/>
@@ -351,16 +376,6 @@ const AdminDashboard = () => {
               </svg>
             </div>
             <span>User Registry</span>
-          </button>
-          <button className="ad-quick-action" onClick={loadData}>
-            <div className="ad-quick-action-icon">
-              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <polyline points="23 4 23 10 17 10"/>
-                <polyline points="1 20 1 14 7 14"/>
-                <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/>
-              </svg>
-            </div>
-            <span>Refresh Data</span>
           </button>
         </div>
 

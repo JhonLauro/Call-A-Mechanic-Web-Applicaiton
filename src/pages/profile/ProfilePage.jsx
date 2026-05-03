@@ -5,6 +5,7 @@ import { getProfile, updateProfile, updatePassword, uploadProfilePhoto } from '.
 import { getVehicles } from '../../services/vehicleService';
 import VehicleManagement from '../../components/VehicleManagement';
 import Snackbar from '../../components/Snackbar';
+import LoadingScreen from '../../components/LoadingScreen';
 import './ProfilePages.css';
 
 const toInitials = (name = '') =>
@@ -15,15 +16,16 @@ const toInitials = (name = '') =>
     .map((part) => part[0]?.toUpperCase())
     .join('') || '?';
 
+const pickFirst = (...values) =>
+  values.find((value) => value !== null && value !== undefined && String(value).trim() !== '');
+
 const ProfilePage = () => {
-  const { token, user, logout } = useAuth();
+  const { token, user, logout, updateUser } = useAuth();
   const navigate = useNavigate();
 
-  // Profile state
-  const [profile, setProfile] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [profile, setProfile] = useState(user || null);
+  const [loading, setLoading] = useState(!user);
 
-  // Edit mode states
   const [isEditingProfile, setIsEditingProfile] = useState(false);
   const [isChangingPassword, setIsChangingPassword] = useState(false);
   const [showVehicleManagement, setShowVehicleManagement] = useState(false);
@@ -31,18 +33,46 @@ const ProfilePage = () => {
   const [vehicles, setVehicles] = useState([]);
   const [vehiclesLoading, setVehiclesLoading] = useState(false);
 
-  // Form states
   const [profileForm, setProfileForm] = useState({ fullName: '', phoneNumber: '' });
   const [passwordForm, setPasswordForm] = useState({ currentPassword: '', newPassword: '', confirmPassword: '' });
 
-  // Feedback states
   const [saving, setSaving] = useState(false);
   const [snackbar, setSnackbar] = useState({ open: false, message: '', type: 'success' });
 
   const normalizedRole = String(profile?.role || user?.role || '').toUpperCase();
   const canManageVehicles = normalizedRole === 'CLIENT';
+  const accountId =
+    normalizedRole === 'MECHANIC'
+      ? pickFirst(
+          profile?.mechanicId,
+          profile?.mechanicID,
+          profile?.mechanic?.mechanicId,
+          profile?.accountIdentifier,
+          user?.mechanicId,
+          user?.mechanicID,
+          user?.accountIdentifier,
+          profile?.id,
+          profile?._id,
+          '-'
+        )
+      : normalizedRole === 'ADMIN'
+        ? pickFirst(
+            profile?.adminId,
+            profile?.adminID,
+            profile?.accountIdentifier,
+            user?.adminId,
+            user?.adminID,
+            user?.accountIdentifier,
+            profile?.id,
+            profile?._id,
+            '-'
+          )
+        : pickFirst(profile?.clientId, profile?.clientID, profile?.id, profile?._id, user?.id, '-');
 
-  // Load profile
+  const showSnackbar = (message, type = 'success') => {
+    setSnackbar({ open: true, message, type });
+  };
+
   useEffect(() => {
     let isMounted = true;
     const loadProfile = async () => {
@@ -53,10 +83,11 @@ const ProfilePage = () => {
       try {
         const data = await getProfile(token);
         if (isMounted) {
-          setProfile(data || user || null);
+          const nextProfile = data ? { ...(user || {}), ...data } : user || null;
+          setProfile(nextProfile);
           setProfileForm({
-            fullName: data?.fullName || '',
-            phoneNumber: data?.phoneNumber || '',
+            fullName: nextProfile?.fullName || '',
+            phoneNumber: nextProfile?.phoneNumber || '',
           });
         }
       } catch {
@@ -106,11 +137,6 @@ const ProfilePage = () => {
     navigate('/login');
   };
 
-  const showSnackbar = (message, type = 'success') => {
-    setSnackbar({ open: true, message, type });
-  };
-
-  // Profile update
   const handleProfileSave = async () => {
     if (!profileForm.fullName.trim()) {
       showSnackbar('Full name is required.', 'error');
@@ -120,6 +146,7 @@ const ProfilePage = () => {
     try {
       await updateProfile({ fullName: profileForm.fullName.trim(), phoneNumber: profileForm.phoneNumber.trim() }, token);
       setProfile(prev => ({ ...prev, fullName: profileForm.fullName, phoneNumber: profileForm.phoneNumber }));
+      updateUser({ fullName: profileForm.fullName, phoneNumber: profileForm.phoneNumber });
       setIsEditingProfile(false);
       showSnackbar('Profile updated successfully!');
     } catch (err) {
@@ -129,7 +156,6 @@ const ProfilePage = () => {
     }
   };
 
-  // Password update
   const handlePasswordSave = async () => {
     if (!passwordForm.currentPassword || !passwordForm.newPassword) {
       showSnackbar('Please fill in all password fields.', 'error');
@@ -139,8 +165,8 @@ const ProfilePage = () => {
       showSnackbar('New passwords do not match.', 'error');
       return;
     }
-    if (passwordForm.newPassword.length < 6) {
-      showSnackbar('Password must be at least 6 characters.', 'error');
+    if (passwordForm.newPassword.length < 8) {
+      showSnackbar('Password must be at least 8 characters.', 'error');
       return;
     }
     setSaving(true);
@@ -156,7 +182,6 @@ const ProfilePage = () => {
     }
   };
 
-  // Photo upload
   const handlePhotoChange = async (e) => {
     const file = e.target.files?.[0];
     if (!file) return;
@@ -169,7 +194,9 @@ const ProfilePage = () => {
     setSaving(true);
     try {
       const result = await uploadProfilePhoto(file, token);
-      setProfile(prev => ({ ...prev, photoUrl: result?.photoUrl || URL.createObjectURL(file), hasPhoto: true }));
+      const nextPhotoUrl = result?.photoUrl || URL.createObjectURL(file);
+      setProfile(prev => ({ ...prev, photoUrl: nextPhotoUrl, hasPhoto: true }));
+      updateUser({ photoUrl: nextPhotoUrl, profilePhotoUrl: nextPhotoUrl, hasPhoto: true });
       showSnackbar('Photo uploaded successfully!');
     } catch (err) {
       showSnackbar(err.message || 'Failed to upload photo.', 'error');
@@ -181,14 +208,13 @@ const ProfilePage = () => {
   if (loading) {
     return (
       <div className="pp-container">
-        <div className="pp-loading">Loading profile...</div>
+        <LoadingScreen />
       </div>
     );
   }
 
   return (
     <div className="pp-container">
-      {/* Header */}
       <header className="pp-header">
         <button className="pp-back-btn" onClick={() => navigate('/dashboard')}>
           <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -204,12 +230,9 @@ const ProfilePage = () => {
         </button>
       </header>
 
-      {/* Main Layout - Sidebar + Content */}
       <div className="pp-layout">
-        {/* Left Sidebar */}
         <aside className="pp-sidebar">
           <div className="pp-sidebar-card">
-            {/* Avatar */}
             <div className="pp-sidebar-avatar-wrapper">
               {photoSrc ? (
                 <img className="pp-sidebar-avatar" src={photoSrc} alt="Profile" />
@@ -227,11 +250,9 @@ const ProfilePage = () => {
               </label>
             </div>
 
-            {/* Name & Role */}
             <h2 className="pp-sidebar-name">{profile?.fullName || 'No name set'}</h2>
             <span className="pp-sidebar-role">{profile?.role || 'User'}</span>
 
-            {/* Contact Info */}
             <div className="pp-sidebar-info">
               <div className="pp-sidebar-info-item">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -249,11 +270,10 @@ const ProfilePage = () => {
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
                 </svg>
-                <span>ID: {profile?.id || profile?._id || '-'}</span>
+                <span>ID: {accountId}</span>
               </div>
             </div>
 
-            {/* Edit Button */}
             <button className="pp-sidebar-btn" onClick={() => setIsEditingProfile(true)}>
               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
@@ -263,14 +283,12 @@ const ProfilePage = () => {
           </div>
         </aside>
 
-        {/* Right Content */}
         <main className="pp-main">
           <div className="pp-main-header">
             <h1 className="pp-title">My Profile</h1>
             <p className="pp-subtitle">Manage your account settings and preferences</p>
           </div>
 
-          {/* Personal Information Card */}
           <div className="pp-card">
             <div className="pp-card-header">
               <h3 className="pp-card-title">Personal Information</h3>
@@ -336,7 +354,6 @@ const ProfilePage = () => {
             )}
           </div>
 
-          {/* Account Information Card */}
           <div className="pp-card">
             <div className="pp-card-header">
               <h3 className="pp-card-title">Account Information</h3>
@@ -392,7 +409,7 @@ const ProfilePage = () => {
               <div className="pp-info-grid">
                 <div className="pp-info-item">
                   <span className="pp-info-label">User ID</span>
-                  <span className="pp-info-value">{profile?.id || profile?._id || '-'}</span>
+                  <span className="pp-info-value">{accountId}</span>
                 </div>
                 <div className="pp-info-item">
                   <span className="pp-info-label">Account Type</span>
@@ -425,7 +442,7 @@ const ProfilePage = () => {
 
               {vehiclesLoading ? (
                 <div className="pp-vehicles-empty">
-                  <p className="pp-vehicles-empty-text">Loading vehicles...</p>
+                  <LoadingScreen compact />
                 </div>
               ) : vehicles.length > 0 ? (
                 <div className="pp-vehicles-list">
@@ -491,7 +508,6 @@ const ProfilePage = () => {
         </main>
       </div>
 
-      {/* Vehicle Management Modal */}
       <VehicleManagement
         isOpen={showVehicleManagement}
         onClose={() => setShowVehicleManagement(false)}

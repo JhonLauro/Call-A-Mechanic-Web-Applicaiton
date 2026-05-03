@@ -2,7 +2,6 @@
 
 .mechanic-dashboard {
   min-height: 100vh;
-  background: #f8fafc;
   font-family: 'Inter', system-ui, sans-serif;
 }
 
@@ -126,6 +125,9 @@
   width: 32px;
   height: 32px;
   border-radius: 50%;
+  border: 2px solid #ffffff;
+  box-shadow: 0 0 0 1.5px #8ea8d8;
+  box-sizing: border-box;
   background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
   color: #ffffff;
   font-size: 12px;
@@ -133,6 +135,19 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  overflow: hidden;
+}
+
+.md-user-avatar-photo {
+  background: #eef4ff;
+}
+
+.md-user-avatar img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+  border-radius: 50%;
 }
 
 .md-user-name {

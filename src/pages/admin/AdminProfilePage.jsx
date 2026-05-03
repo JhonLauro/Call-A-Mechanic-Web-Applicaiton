@@ -1,7 +1,11 @@
-import React, { useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import Snackbar from '../../components/Snackbar';
+import { getProfile, updatePassword, updateProfile, uploadProfilePhoto } from '../../services/profileService';
+import { getAllUsers } from '../../services/adminService';
+import { getAppointments } from '../../services/appointmentService';
+import LoadingScreen from '../../components/LoadingScreen';
 import './AdminProfilePage.css';
 
 const toInitials = (name = '') =>
@@ -12,33 +16,37 @@ const toInitials = (name = '') =>
     .map((part) => part[0]?.toUpperCase())
     .join('') || '?';
 
+const pickFirst = (...values) =>
+  values.find((value) => value !== null && value !== undefined && String(value).trim() !== '');
+
 const AdminProfilePage = () => {
-  const { user, logout } = useAuth();
+  const { user, token, logout, updateUser } = useAuth();
   const navigate = useNavigate();
 
-  // Mock admin profile data
-  const [profile, setProfile] = useState({
-    fullName: user?.fullName || 'John Admin',
-    adminId: 'ADM-001',
-    email: user?.email || 'admin@callmechanic.com',
-    phoneNumber: '0917-123-4567',
-    role: 'Admin',
-    status: 'Active',
-    dateCreated: 'January 15, 2026',
-    lastUpdated: 'March 27, 2026',
-    photoUrl: '',
-  });
+  const fallbackProfile = useMemo(() => ({
+    fullName: user?.fullName || 'Admin',
+    adminId: pickFirst(user?.adminId, user?.adminID, user?.accountIdentifier, user?.id, '-'),
+    email: user?.email || '-',
+    phoneNumber: user?.phoneNumber || '',
+    role: user?.role || 'Admin',
+    status: user?.isActive === false ? 'Inactive' : 'Active',
+    dateCreated: user?.createdAt || user?.dateCreated || '-',
+    lastUpdated: user?.updatedAt || user?.lastUpdated || '-',
+    photoUrl: user?.photoUrl || user?.profilePhotoUrl || user?.avatarUrl || '',
+  }), [user]);
 
-  // Mock admin summary stats
-  const adminStats = {
-    totalUsers: 156,
-    totalMechanics: 8,
-    activeAppointments: 12,
-  };
+  const [profile, setProfile] = useState({ ...fallbackProfile });
+
+  const [adminStats, setAdminStats] = useState({
+    totalUsers: 0,
+    totalMechanics: 0,
+    activeAppointments: 0,
+  });
 
   // Edit mode states
   const [isEditingProfile, setIsEditingProfile] = useState(false);
   const [isChangingPassword, setIsChangingPassword] = useState(false);
+  const [loading, setLoading] = useState(!user);
 
   // Form states
   const [profileForm, setProfileForm] = useState({
@@ -61,6 +69,73 @@ const AdminProfilePage = () => {
     setSnackbar({ open: true, message, type });
   };
 
+  const formatDate = (value) => {
+    if (!value) return '-';
+    const date = new Date(value);
+    if (Number.isNaN(date.getTime())) return value;
+    return date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+  };
+
+  const normalizeProfile = useCallback((data = {}) => ({
+    fullName: data.fullName || fallbackProfile.fullName,
+    adminId: pickFirst(data.adminId, data.adminID, data.accountIdentifier, fallbackProfile.adminId, data.id, '-'),
+    email: data.email || fallbackProfile.email,
+    phoneNumber: data.phoneNumber || fallbackProfile.phoneNumber,
+    role: data.role || fallbackProfile.role,
+    status: data.isActive === false ? 'Inactive' : 'Active',
+    dateCreated: formatDate(data.createdAt || data.dateCreated || fallbackProfile.dateCreated),
+    lastUpdated: formatDate(data.updatedAt || data.lastUpdated || fallbackProfile.lastUpdated),
+    photoUrl: data.photoUrl || data.profilePhotoUrl || data.avatarUrl || fallbackProfile.photoUrl,
+  }), [fallbackProfile]);
+
+  const applyProfile = useCallback((nextProfile) => {
+    setProfile(nextProfile);
+    setProfileForm({
+      fullName: nextProfile.fullName || '',
+      email: nextProfile.email || '',
+      phoneNumber: nextProfile.phoneNumber || '',
+    });
+  }, []);
+
+  const loadAdminProfile = useCallback(async () => {
+    if (!token) {
+      applyProfile(fallbackProfile);
+      setLoading(false);
+      return;
+    }
+
+    if (!user) setLoading(true);
+    try {
+      const [profileData, usersData, appointmentsData] = await Promise.all([
+        getProfile(token),
+        getAllUsers(token),
+        getAppointments(token),
+      ]);
+
+      const users = Array.isArray(usersData?.users) ? usersData.users : [];
+      const appointments = Array.isArray(appointmentsData) ? appointmentsData : [];
+      const activeStatuses = new Set(['PENDING', 'IN_PROGRESS']);
+
+      applyProfile(normalizeProfile(profileData || {}));
+      setAdminStats({
+        totalUsers: users.length,
+        totalMechanics: users.filter((item) => String(item.role || '').toUpperCase() === 'MECHANIC').length,
+        activeAppointments: appointments.filter((appointment) =>
+          activeStatuses.has(String(appointment.status || '').toUpperCase())
+        ).length,
+      });
+    } catch (err) {
+      applyProfile(normalizeProfile(user || {}));
+      showSnackbar(err.message || 'Failed to load admin profile details.', 'error');
+    } finally {
+      setLoading(false);
+    }
+  }, [applyProfile, fallbackProfile, normalizeProfile, token, user]);
+
+  useEffect(() => {
+    loadAdminProfile();
+  }, [loadAdminProfile]);
+
   const handleLogout = () => {
     logout();
     navigate('/login');
@@ -80,9 +155,6 @@ const AdminProfilePage = () => {
     if (!profileForm.fullName.trim()) {
       newErrors.fullName = 'Full name is required';
     }
-    if (!profileForm.email.trim()) {
-      newErrors.email = 'Email is required';
-    }
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -91,19 +163,25 @@ const AdminProfilePage = () => {
     if (!validateProfileForm()) return;
 
     setSaving(true);
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 800));
+    try {
+      const updated = await updateProfile(
+        {
+          fullName: profileForm.fullName.trim(),
+          phoneNumber: profileForm.phoneNumber.trim(),
+        },
+        token
+      );
 
-    setProfile(prev => ({
-      ...prev,
-      fullName: profileForm.fullName,
-      email: profileForm.email,
-      phoneNumber: profileForm.phoneNumber,
-      lastUpdated: new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }),
-    }));
-    setIsEditingProfile(false);
-    setSaving(false);
-    showSnackbar('Profile updated successfully!');
+      const nextProfile = normalizeProfile({ ...profile, ...updated, ...profileForm });
+      applyProfile(nextProfile);
+      updateUser(nextProfile);
+      setIsEditingProfile(false);
+      showSnackbar('Profile updated successfully!');
+    } catch (err) {
+      showSnackbar(err.message || 'Failed to update profile.', 'error');
+    } finally {
+      setSaving(false);
+    }
   };
 
   const handleProfileCancel = () => {
@@ -132,8 +210,8 @@ const AdminProfilePage = () => {
     }
     if (!passwordForm.newPassword) {
       newErrors.newPassword = 'New password is required';
-    } else if (passwordForm.newPassword.length < 6) {
-      newErrors.newPassword = 'Password must be at least 6 characters';
+    } else if (passwordForm.newPassword.length < 8) {
+      newErrors.newPassword = 'Password must be at least 8 characters';
     }
     if (!passwordForm.confirmPassword) {
       newErrors.confirmPassword = 'Please confirm your new password';
@@ -148,13 +226,23 @@ const AdminProfilePage = () => {
     if (!validatePasswordForm()) return;
 
     setSaving(true);
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 800));
+    try {
+      await updatePassword(
+        {
+          currentPassword: passwordForm.currentPassword,
+          newPassword: passwordForm.newPassword,
+        },
+        token
+      );
 
-    setPasswordForm({ currentPassword: '', newPassword: '', confirmPassword: '' });
-    setIsChangingPassword(false);
-    setSaving(false);
-    showSnackbar('Password changed successfully!');
+      setPasswordForm({ currentPassword: '', newPassword: '', confirmPassword: '' });
+      setIsChangingPassword(false);
+      showSnackbar('Password changed successfully!');
+    } catch (err) {
+      showSnackbar(err.message || 'Failed to change password.', 'error');
+    } finally {
+      setSaving(false);
+    }
   };
 
   const handlePasswordCancel = () => {
@@ -163,18 +251,40 @@ const AdminProfilePage = () => {
     setIsChangingPassword(false);
   };
 
-  // Photo upload handler (UI only)
-  const handlePhotoUpload = (e) => {
+  const handlePhotoUpload = async (e) => {
     const file = e.target.files?.[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setProfile(prev => ({ ...prev, photoUrl: reader.result }));
-        showSnackbar('Photo updated successfully!');
-      };
-      reader.readAsDataURL(file);
+    if (!file) return;
+
+    if (!file.type.startsWith('image/')) {
+      showSnackbar('Please select an image file.', 'error');
+      return;
+    }
+
+    setSaving(true);
+    try {
+      const result = await uploadProfilePhoto(file, token);
+      const nextPhotoUrl = result?.photoUrl || URL.createObjectURL(file);
+      setProfile(prev => ({
+        ...prev,
+        photoUrl: nextPhotoUrl,
+        lastUpdated: formatDate(new Date()),
+      }));
+      updateUser({ photoUrl: nextPhotoUrl, profilePhotoUrl: nextPhotoUrl, hasPhoto: true });
+      showSnackbar('Photo updated successfully!');
+    } catch (err) {
+      showSnackbar(err.message || 'Failed to upload photo.', 'error');
+    } finally {
+      setSaving(false);
     }
   };
+
+  if (loading) {
+    return (
+      <div className="admin-profile">
+        <LoadingScreen />
+      </div>
+    );
+  }
 
   return (
     <div className="admin-profile">
@@ -254,7 +364,7 @@ const AdminProfilePage = () => {
                 </div>
                 <div className="ap-summary-stat">
                   <span className="ap-summary-value">{adminStats.activeAppointments}</span>
-                  <span className="ap-summary-label">Active Today</span>
+                  <span className="ap-summary-label">Active Jobs</span>
                 </div>
               </div>
             </div>
@@ -294,7 +404,7 @@ const AdminProfilePage = () => {
                       type="email"
                       name="email"
                       value={profileForm.email}
-                      onChange={handleProfileChange}
+                      disabled
                       placeholder="Enter email"
                       className={errors.email ? 'ap-input-error' : ''}
                     />

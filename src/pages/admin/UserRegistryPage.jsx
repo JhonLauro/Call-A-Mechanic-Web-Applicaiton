@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { getAllUsers, deleteUser } from '../../services/adminService';
 import Snackbar from '../../components/Snackbar';
+import LoadingScreen from '../../components/LoadingScreen';
 import './UserRegistryPage.css';
 
 const UserRegistryPage = () => {
@@ -216,8 +217,8 @@ const UserRegistryPage = () => {
               <tbody>
                 {loading ? (
                   <tr>
-                    <td colSpan="8" style={{ textAlign: 'center', padding: '2rem', color: '#6b7280' }}>
-                      Loading users...
+                    <td colSpan="8">
+                      <LoadingScreen compact />
                     </td>
                   </tr>
                 ) : filteredUsers.length > 0 ? (

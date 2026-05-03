@@ -1,10 +1,12 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { getVehicles, createVehicle, deleteVehicle } from '../services/vehicleService';
+import LoadingScreen from './LoadingScreen';
 import './VehicleManagement.css';
 
 const VehicleManagement = ({ isOpen, onClose, onVehicleChange }) => {
   const { token } = useAuth();
+  const onVehicleChangeRef = useRef(onVehicleChange);
   const [showAddForm, setShowAddForm] = useState(false);
   const [vehicles, setVehicles] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -21,19 +23,23 @@ const VehicleManagement = ({ isOpen, onClose, onVehicleChange }) => {
   const [errors, setErrors] = useState({});
   const [apiError, setApiError] = useState('');
 
+  useEffect(() => {
+    onVehicleChangeRef.current = onVehicleChange;
+  }, [onVehicleChange]);
+
   const loadVehicles = useCallback(async () => {
     setLoading(true);
     setApiError('');
     try {
       const data = await getVehicles(token);
       setVehicles(data || []);
-      if (onVehicleChange) onVehicleChange(data || []);
+      if (onVehicleChangeRef.current) onVehicleChangeRef.current(data || []);
     } catch (error) {
       setApiError(error.message || 'Failed to load vehicles');
     } finally {
       setLoading(false);
     }
-  }, [token, onVehicleChange]);
+  }, [token]);
 
   // Load vehicles from API
   useEffect(() => {
@@ -292,7 +298,7 @@ const VehicleManagement = ({ isOpen, onClose, onVehicleChange }) => {
 
             {loading ? (
               <div className="vm-empty">
-                <p className="vm-empty-text">Loading vehicles...</p>
+                <LoadingScreen compact />
               </div>
             ) : vehicles.length === 0 ? (
               <div className="vm-empty">

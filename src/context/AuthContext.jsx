@@ -47,8 +47,17 @@ export const AuthProvider = ({ children }) => {
 
   const login = useCallback(async (email, password) => {
     const data = await loginUser(email, password);
-    persistSession(data.token, data.user);
-    return data;
+    const identifier = String(email || '').trim();
+    const role = String(data.user?.role || '').toUpperCase();
+    const accountIdentifier = identifier && !identifier.includes('@') ? identifier : data.user?.accountIdentifier;
+    const enrichedUser = {
+      ...data.user,
+      ...(accountIdentifier ? { accountIdentifier } : {}),
+      ...(role === 'MECHANIC' && accountIdentifier && !data.user?.mechanicId ? { mechanicId: accountIdentifier } : {}),
+      ...(role === 'ADMIN' && accountIdentifier && !data.user?.adminId ? { adminId: accountIdentifier } : {}),
+    };
+    persistSession(data.token, enrichedUser);
+    return { ...data, user: enrichedUser };
   }, []);
 
   const register = useCallback(async (userData) => {
@@ -63,6 +72,14 @@ export const AuthProvider = ({ children }) => {
     setUser(null);
   }, []);
 
+  const updateUser = useCallback((updates) => {
+    setUser((currentUser) => {
+      const nextUser = { ...(currentUser || {}), ...(updates || {}) };
+      localStorage.setItem('cam_user', JSON.stringify(nextUser));
+      return nextUser;
+    });
+  }, []);
+
   const value = {
     user,
     token,
@@ -71,6 +88,7 @@ export const AuthProvider = ({ children }) => {
     login,
     register,
     logout,
+    updateUser,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

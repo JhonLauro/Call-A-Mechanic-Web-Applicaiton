@@ -47,7 +47,6 @@
   min-height: 100vh;
   display: flex;
   font-family: 'Inter', system-ui, sans-serif;
-  background: linear-gradient(180deg, #f0f7ff 0%, #e0edff 50%, #dbeafe 100%);
   position: relative;
   /* Hide scrollbar */
   -ms-overflow-style: none;  /* IE and Edge */

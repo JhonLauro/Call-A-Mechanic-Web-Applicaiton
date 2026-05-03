@@ -2,8 +2,10 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { getAppointments, claimAppointment, updateAppointmentStatus } from '../../services/appointmentService';
+import { getProfile } from '../../services/profileService';
 import AppointmentDetailsPanel from '../../components/AppointmentDetailsPanel';
 import Snackbar from '../../components/Snackbar';
+import LoadingScreen from '../../components/LoadingScreen';
 import './MechanicDashboard.css';
 
 const normalizeStatus = (status) => (status === 'COMPLETED' ? 'FINISHED' : status);
@@ -47,8 +49,15 @@ const getStatusBadgeClass = (status) => {
   return '';
 };
 
+const sortAppointmentsNewestFirst = (a, b) => {
+  const dateA = Date.parse(a?.scheduledDate || '') || 0;
+  const dateB = Date.parse(b?.scheduledDate || '') || 0;
+  if (dateA !== dateB) return dateB - dateA;
+  return Number(b?.id || 0) - Number(a?.id || 0);
+};
+
 const MechanicDashboard = () => {
-  const { user, token, logout } = useAuth();
+  const { user, token, logout, updateUser } = useAuth();
   const navigate = useNavigate();
 
   const [showUserMenu, setShowUserMenu] = useState(false);
@@ -66,6 +75,7 @@ const MechanicDashboard = () => {
     .join('')
     .toUpperCase()
     .slice(0, 2);
+  const userPhoto = user?.photoUrl || user?.profilePhotoUrl || user?.avatarUrl || '';
 
   const showMessage = useCallback((message, type = 'success') => {
     setSnackbar({ open: true, message, type });
@@ -105,26 +115,39 @@ const MechanicDashboard = () => {
     return status === 'PENDING' && !appointment?.mechanic && (mechanicId === null || mechanicId === undefined);
   }, []);
 
-  const loadAppointments = useCallback(async () => {
+  const loadAppointments = useCallback(async ({ silent = false } = {}) => {
     if (!token) return;
 
-    setLoading(true);
+    if (!silent) setLoading(true);
     try {
       const data = await getAppointments(token);
       setAppointments(Array.isArray(data) ? data : []);
     } catch (error) {
-      showMessage(error.message || 'Failed to load appointments.', 'error');
+      if (!silent) showMessage(error.message || 'Failed to load appointments.', 'error');
     } finally {
-      setLoading(false);
+      if (!silent) setLoading(false);
     }
   }, [token, showMessage]);
 
   useEffect(() => {
     loadAppointments();
-  }, [loadAppointments]);
+    if (token) {
+      getProfile(token)
+        .then((profileData) => {
+          if (profileData) updateUser(profileData);
+        })
+        .catch(() => {});
+    }
+    const refreshTimer = setInterval(() => {
+      loadAppointments({ silent: true });
+    }, 30000);
 
-  const newServiceRequests = appointments.filter(isUnassignedPending);
-  const myAssignedJobs = appointments.filter(isAssignedToCurrentMechanic);
+    return () => clearInterval(refreshTimer);
+  }, [loadAppointments, token, updateUser]);
+
+  const sortedAppointments = [...appointments].sort(sortAppointmentsNewestFirst);
+  const newServiceRequests = sortedAppointments.filter(isUnassignedPending);
+  const myAssignedJobs = sortedAppointments.filter(isAssignedToCurrentMechanic);
   const myActiveJobs = myAssignedJobs.filter((appointment) => {
     const status = normalizeStatus(appointment.status);
     return status === 'PENDING' || status === 'IN_PROGRESS';
@@ -140,7 +163,7 @@ const MechanicDashboard = () => {
     try {
       await claimAppointment(appointmentId, token);
       showMessage('Job claimed successfully.');
-      await loadAppointments();
+      await loadAppointments({ silent: true });
     } catch (error) {
       showMessage(error.message || 'Failed to claim job.', 'error');
     } finally {
@@ -157,7 +180,7 @@ const MechanicDashboard = () => {
       await updateAppointmentStatus(appointmentId, newStatus, token);
       setSelectedAppointment((prev) => (prev?.id === appointmentId ? { ...prev, status: newStatus } : prev));
       showMessage(`Appointment marked as ${formatStatus(newStatus)}.`);
-      await loadAppointments();
+      await loadAppointments({ silent: true });
     } catch (error) {
       showMessage(error.message || 'Failed to update appointment status.', 'error');
     } finally {
@@ -183,7 +206,7 @@ const MechanicDashboard = () => {
   if (loading) {
     return (
       <div className="mechanic-dashboard">
-        <div className="md-loading">Loading mechanic dashboard...</div>
+        <LoadingScreen />
       </div>
     );
   }
@@ -213,7 +236,9 @@ const MechanicDashboard = () => {
 
             <div className="md-user-menu-wrapper">
               <button className="md-user-btn" onClick={() => setShowUserMenu((prev) => !prev)} type="button">
-                <div className="md-user-avatar">{userInitials}</div>
+                <div className={`md-user-avatar ${userPhoto ? 'md-user-avatar-photo' : ''}`}>
+                  {userPhoto ? <img src={userPhoto} alt={userName} /> : userInitials}
+                </div>
                 <span className="md-user-name">{userName}</span>
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <polyline points="6 9 12 15 18 9" />
@@ -270,9 +295,6 @@ const MechanicDashboard = () => {
         </div>
 
         <div className="md-actions">
-          <button className="md-btn-secondary" type="button" onClick={loadAppointments} disabled={loading || !!busyAction}>
-            Refresh Data
-          </button>
           <button className="md-btn-primary" type="button" onClick={() => navigate('/profile')}>
             My Profile
           </button>

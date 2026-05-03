@@ -12,6 +12,7 @@ html, body {
   overflow-y: auto;
   scrollbar-width: none;
   -ms-overflow-style: none;
+  background: #eaf3ff;
 }
 
 html::-webkit-scrollbar,
@@ -26,6 +27,62 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+:root {
+  --cam-page-background:
+    radial-gradient(circle at 8% 88%, rgba(47, 107, 255, 0.2) 0%, rgba(47, 107, 255, 0.08) 24%, transparent 48%),
+    linear-gradient(45deg, #dcecff 0%, #edf5ff 48%, #fbfdff 100%);
+  --cam-page-texture:
+    linear-gradient(90deg, rgba(47, 107, 255, 0.045) 1px, transparent 1px),
+    linear-gradient(180deg, rgba(47, 107, 255, 0.04) 1px, transparent 1px);
+}
+
+.landing-page,
+.auth-page,
+.client-dashboard,
+.admin-dashboard,
+.mechanic-dashboard,
+.admin-profile,
+.user-registry,
+.pp-container,
+.dashboard-container {
+  background: var(--cam-page-background);
+  background-attachment: fixed;
+  position: relative;
+}
+
+.landing-page::before,
+.auth-page::before,
+.client-dashboard::before,
+.admin-dashboard::before,
+.mechanic-dashboard::before,
+.admin-profile::before,
+.user-registry::before,
+.pp-container::before,
+.dashboard-container::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background-image: var(--cam-page-texture);
+  background-size: 48px 48px;
+  mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0.42), transparent 72%);
+  opacity: 0.55;
+  z-index: 0;
+}
+
+.landing-page > *,
+.auth-page > *,
+.client-dashboard > *,
+.admin-dashboard > *,
+.mechanic-dashboard > *,
+.admin-profile > *,
+.user-registry > *,
+.pp-container > *,
+.dashboard-container > * {
+  position: relative;
+  z-index: 1;
 }
 
 code {

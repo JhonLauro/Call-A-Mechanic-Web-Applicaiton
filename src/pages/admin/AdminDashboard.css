@@ -6,7 +6,6 @@
 
 .admin-dashboard {
   min-height: 100vh;
-  background: #f8fafc;
   font-family: 'Inter', system-ui, sans-serif;
 }
 
@@ -154,6 +153,9 @@
   height: 32px;
   background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%);
   border-radius: 50%;
+  border: 2px solid #ffffff;
+  box-shadow: 0 0 0 1.5px #8ea8d8;
+  box-sizing: border-box;
   color: white;
   font-size: 12px;
   font-weight: 600;
@@ -517,6 +519,19 @@
   color: #64748b;
   text-transform: uppercase;
   letter-spacing: 0.5px;
+  overflow: hidden;
+}
+
+.ad-user-avatar-photo {
+  background: #eef4ff;
+}
+
+.ad-user-avatar img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+  border-radius: 50%;
 }
 
 .ad-table td {

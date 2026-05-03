@@ -3,6 +3,7 @@ import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { getProfile, updateProfile } from '../../services/profileService';
 import Snackbar from '../../components/Snackbar';
+import LoadingScreen from '../../components/LoadingScreen';
 import './ProfilePages.css';
 
 const profileNavItems = [
@@ -148,7 +149,7 @@ const EditProfilePage = () => {
         </nav>
 
         <section className="profile-card">
-          {loading && <p className="loading-note">Loading profile form...</p>}
+          {loading && <LoadingScreen compact />}
 
           {!loading && (
             <form onSubmit={handleSubmit} noValidate>
