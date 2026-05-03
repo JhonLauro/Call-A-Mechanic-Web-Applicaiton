@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { useAuth } from './context/AuthContext';
 import LandingPage from './pages/landing/LandingPage';
 import LoginPage from './pages/auth/LoginPage';
@@ -45,6 +45,33 @@ const LoadingScreen = () => (
   </div>
 );
 
+const PAGE_TITLES = [
+  { pattern: /^\/$/, title: 'Home' },
+  { pattern: /^\/login$/, title: 'Sign In' },
+  { pattern: /^\/register$/, title: 'Create Account' },
+  { pattern: /^\/dashboard$/, title: 'Dashboard' },
+  { pattern: /^\/client\/dashboard$/, title: 'Client Dashboard' },
+  { pattern: /^\/admin\/dashboard$/, title: 'Admin Dashboard' },
+  { pattern: /^\/mechanic\/dashboard$/, title: 'Mechanic Dashboard' },
+  { pattern: /^\/profile$/, title: 'My Profile' },
+  { pattern: /^\/admin\/profile$/, title: 'Admin Profile' },
+  { pattern: /^\/admin\/users$/, title: 'User Registry' },
+  { pattern: /^\/profile\/edit$/, title: 'Edit Profile' },
+  { pattern: /^\/profile\/password$/, title: 'Change Password' },
+  { pattern: /^\/profile\/photo$/, title: 'Profile Photo' },
+];
+
+const BrowserTitle = () => {
+  const { pathname } = useLocation();
+
+  React.useEffect(() => {
+    const match = PAGE_TITLES.find((page) => page.pattern.test(pathname));
+    document.title = match ? `Call-A-Mechanic | ${match.title}` : 'Call-A-Mechanic';
+  }, [pathname]);
+
+  return null;
+};
+
 /**
  * ProtectedRoute — redirects unauthenticated users to /login.
  * Shows nothing while the auth state is hydrating from localStorage.
@@ -74,6 +101,7 @@ const RoleProtectedRoute = ({ allowedRoles, children }) => {
 function App() {
   return (
     <BrowserRouter>
+      <BrowserTitle />
       <Routes>
         {/* Public routes */}
         <Route path="/" element={<LandingPage />} />
