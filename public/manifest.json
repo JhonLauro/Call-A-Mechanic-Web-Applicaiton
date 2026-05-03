@@ -3,7 +3,7 @@
   "name": "Call-A-Mechanic",
   "icons": [
     {
-      "src": "favicon.svg",
+      "src": "wrench-favicon.svg",
       "sizes": "64x64",
       "type": "image/svg+xml",
       "purpose": "any"
