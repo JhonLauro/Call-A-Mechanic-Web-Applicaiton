@@ -1,4 +1,4 @@
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080';
+const API_BASE_URL = (process.env.REACT_APP_API_BASE_URL || '/api/v1').replace(/\/$/, '');
 
 /**
  * Generic request handler for Vehicle API
@@ -43,7 +43,7 @@ const requestApi = async (endpoint, options = {}) => {
  * GET /api/v1/vehicles
  */
 export const getVehicles = async (token) => {
-  const response = await requestApi('/api/v1/vehicles', {
+  const response = await requestApi('/vehicles', {
     method: 'GET',
     headers: {
       Authorization: `Bearer ${token}`,
@@ -57,7 +57,7 @@ export const getVehicles = async (token) => {
  * GET /api/v1/vehicles/{id}
  */
 export const getVehicleById = async (vehicleId, token) => {
-  const response = await requestApi(`/api/v1/vehicles/${vehicleId}`, {
+  const response = await requestApi(`/vehicles/${vehicleId}`, {
     method: 'GET',
     headers: {
       Authorization: `Bearer ${token}`,
@@ -71,7 +71,7 @@ export const getVehicleById = async (vehicleId, token) => {
  * POST /api/v1/vehicles
  */
 export const createVehicle = async (vehicleData, token) => {
-  const response = await requestApi('/api/v1/vehicles', {
+  const response = await requestApi('/vehicles', {
     method: 'POST',
     headers: {
       Authorization: `Bearer ${token}`,
@@ -86,7 +86,7 @@ export const createVehicle = async (vehicleData, token) => {
  * PUT /api/v1/vehicles/{id}
  */
 export const updateVehicle = async (vehicleId, vehicleData, token) => {
-  const response = await requestApi(`/api/v1/vehicles/${vehicleId}`, {
+  const response = await requestApi(`/vehicles/${vehicleId}`, {
     method: 'PUT',
     headers: {
       Authorization: `Bearer ${token}`,
@@ -101,7 +101,7 @@ export const updateVehicle = async (vehicleId, vehicleData, token) => {
  * DELETE /api/v1/vehicles/{id}
  */
 export const deleteVehicle = async (vehicleId, token) => {
-  const response = await requestApi(`/api/v1/vehicles/${vehicleId}`, {
+  const response = await requestApi(`/vehicles/${vehicleId}`, {
     method: 'DELETE',
     headers: {
       Authorization: `Bearer ${token}`,
