@@ -445,3 +445,208 @@ code {
   color: #93c5fd;
   background: rgba(15, 23, 42, 0.4);
 }
+
+/* Final dark-mode correction layer for page CSS that hard-codes white. */
+:root[data-theme='dark'] body {
+  background: var(--cam-body-bg) !important;
+  color: var(--cam-text) !important;
+}
+
+:root[data-theme='dark'] .landing-header,
+:root[data-theme='dark'] .cd-header,
+:root[data-theme='dark'] .ad-header,
+:root[data-theme='dark'] .md-header,
+:root[data-theme='dark'] .ap-header,
+:root[data-theme='dark'] .pp-header,
+:root[data-theme='dark'] .profile-topbar {
+  background: rgba(12, 23, 40, 0.92) !important;
+  border-color: rgba(148, 163, 184, 0.2) !important;
+  box-shadow: 0 16px 40px rgba(2, 6, 23, 0.34) !important;
+}
+
+:root[data-theme='dark'] .cd-stat-card,
+:root[data-theme='dark'] .ad-stat-card,
+:root[data-theme='dark'] .md-stat-card,
+:root[data-theme='dark'] .cd-vehicles-section,
+:root[data-theme='dark'] .cd-current-service,
+:root[data-theme='dark'] .cd-current-service-card,
+:root[data-theme='dark'] .cd-action-card,
+:root[data-theme='dark'] .cd-quick-action-card,
+:root[data-theme='dark'] .cd-history-card,
+:root[data-theme='dark'] .ad-quick-action,
+:root[data-theme='dark'] .ad-table-container,
+:root[data-theme='dark'] .ad-search-box,
+:root[data-theme='dark'] .ad-filter-select,
+:root[data-theme='dark'] .ad-filter-date,
+:root[data-theme='dark'] .md-card,
+:root[data-theme='dark'] .md-job-card,
+:root[data-theme='dark'] .md-stat-card,
+:root[data-theme='dark'] .md-btn-secondary,
+:root[data-theme='dark'] .ur-stat-card,
+:root[data-theme='dark'] .ur-card,
+:root[data-theme='dark'] .ur-table-card,
+:root[data-theme='dark'] .ur-search-box,
+:root[data-theme='dark'] .ur-filter-select,
+:root[data-theme='dark'] .ap-card,
+:root[data-theme='dark'] .ap-form-input,
+:root[data-theme='dark'] .ap-security-item,
+:root[data-theme='dark'] .pp-card,
+:root[data-theme='dark'] .pp-sidebar-card,
+:root[data-theme='dark'] .pp-vehicle-card,
+:root[data-theme='dark'] .profile-card,
+:root[data-theme='dark'] .auth-form-box,
+:root[data-theme='dark'] .auth-left-feature,
+:root[data-theme='dark'] .feature-card,
+:root[data-theme='dark'] .features-section,
+:root[data-theme='dark'] .ba-container,
+:root[data-theme='dark'] .cmm-container,
+:root[data-theme='dark'] .vm-container,
+:root[data-theme='dark'] .vm-form-card,
+:root[data-theme='dark'] .vm-vehicle-card,
+:root[data-theme='dark'] .vm-empty-state,
+:root[data-theme='dark'] .adp-panel,
+:root[data-theme='dark'] .adp-card,
+:root[data-theme='dark'] .adp-detail-card,
+:root[data-theme='dark'] .adp-mechanic-trigger,
+:root[data-theme='dark'] .adp-mechanic-menu {
+  background: var(--cam-surface) !important;
+  border-color: var(--cam-border) !important;
+  color: var(--cam-text) !important;
+}
+
+:root[data-theme='dark'] .cd-stat-card:hover,
+:root[data-theme='dark'] .ad-stat-card:hover,
+:root[data-theme='dark'] .md-stat-card:hover,
+:root[data-theme='dark'] .cd-action-card:hover,
+:root[data-theme='dark'] .ad-quick-action:hover,
+:root[data-theme='dark'] .feature-card:hover,
+:root[data-theme='dark'] .auth-left-feature:hover,
+:root[data-theme='dark'] .vm-vehicle-card:hover,
+:root[data-theme='dark'] .pp-vehicle-card:hover,
+:root[data-theme='dark'] .ur-stat-card:hover,
+:root[data-theme='dark'] .md-btn-secondary:hover:not(:disabled) {
+  background: var(--cam-surface-muted) !important;
+  border-color: rgba(96, 165, 250, 0.38) !important;
+  box-shadow: 0 18px 46px rgba(2, 6, 23, 0.4) !important;
+}
+
+:root[data-theme='dark'] .ad-table thead,
+:root[data-theme='dark'] .md-table thead,
+:root[data-theme='dark'] .cd-table thead,
+:root[data-theme='dark'] .ur-table thead {
+  background: #0c1728 !important;
+  border-color: var(--cam-border) !important;
+}
+
+:root[data-theme='dark'] .ad-table tbody tr:hover,
+:root[data-theme='dark'] .md-table tbody tr:hover,
+:root[data-theme='dark'] .cd-table tbody tr:hover,
+:root[data-theme='dark'] .ur-table tbody tr:hover,
+:root[data-theme='dark'] .adp-mechanic-option:hover {
+  background: #172a45 !important;
+}
+
+:root[data-theme='dark'] .ad-table td,
+:root[data-theme='dark'] .md-table td,
+:root[data-theme='dark'] .cd-table td,
+:root[data-theme='dark'] .ur-table td,
+:root[data-theme='dark'] .ad-table th,
+:root[data-theme='dark'] .md-table th,
+:root[data-theme='dark'] .cd-table th,
+:root[data-theme='dark'] .ur-table th {
+  border-color: rgba(148, 163, 184, 0.16) !important;
+}
+
+:root[data-theme='dark'] .ad-section-count,
+:root[data-theme='dark'] .md-section-count,
+:root[data-theme='dark'] .cd-stat-badge,
+:root[data-theme='dark'] .ad-quick-action-icon,
+:root[data-theme='dark'] .cd-vehicles-icon,
+:root[data-theme='dark'] .cd-icon-btn:hover,
+:root[data-theme='dark'] .ad-icon-btn:hover,
+:root[data-theme='dark'] .md-icon-btn:hover,
+:root[data-theme='dark'] .cd-dropdown-item:hover,
+:root[data-theme='dark'] .ad-dropdown-item:hover,
+:root[data-theme='dark'] .md-dropdown-item:hover,
+:root[data-theme='dark'] .btn-nav-secondary:hover,
+:root[data-theme='dark'] .ba-back-btn:hover,
+:root[data-theme='dark'] .cmm-back-btn:hover,
+:root[data-theme='dark'] .vm-back-btn:hover,
+:root[data-theme='dark'] .ap-back-btn:hover,
+:root[data-theme='dark'] .pp-back-btn:hover {
+  background: var(--cam-surface-muted) !important;
+  color: var(--cam-text) !important;
+}
+
+:root[data-theme='dark'] .ba-btn-secondary,
+:root[data-theme='dark'] .cmm-btn-secondary,
+:root[data-theme='dark'] .vm-btn-secondary,
+:root[data-theme='dark'] .ap-btn-secondary,
+:root[data-theme='dark'] .pp-btn-secondary,
+:root[data-theme='dark'] .ad-view-btn,
+:root[data-theme='dark'] .cd-vehicles-btn,
+:root[data-theme='dark'] .btn-hero-secondary,
+:root[data-theme='dark'] .back-home-btn {
+  background: var(--cam-surface-soft) !important;
+  border-color: var(--cam-border) !important;
+  color: var(--cam-text-soft) !important;
+}
+
+:root[data-theme='dark'] .ba-btn-secondary:hover,
+:root[data-theme='dark'] .cmm-btn-secondary:hover,
+:root[data-theme='dark'] .vm-btn-secondary:hover,
+:root[data-theme='dark'] .ap-btn-secondary:hover,
+:root[data-theme='dark'] .pp-btn-secondary:hover,
+:root[data-theme='dark'] .cd-vehicles-btn:hover,
+:root[data-theme='dark'] .btn-hero-secondary:hover,
+:root[data-theme='dark'] .back-home-btn:hover {
+  background: var(--cam-surface-muted) !important;
+  border-color: rgba(96, 165, 250, 0.38) !important;
+  color: var(--cam-text) !important;
+}
+
+:root[data-theme='dark'] input,
+:root[data-theme='dark'] select,
+:root[data-theme='dark'] textarea,
+:root[data-theme='dark'] .input-wrapper {
+  background-color: var(--cam-surface-soft) !important;
+  border-color: var(--cam-border) !important;
+  color: var(--cam-text) !important;
+}
+
+:root[data-theme='dark'] input::placeholder,
+:root[data-theme='dark'] textarea::placeholder {
+  color: #64748b !important;
+}
+
+:root[data-theme='dark'] .ad-status-finished,
+:root[data-theme='dark'] .md-status-finished,
+:root[data-theme='dark'] .cd-status-finished {
+  background: rgba(34, 197, 94, 0.16) !important;
+  color: #86efac !important;
+  border-color: rgba(34, 197, 94, 0.32) !important;
+}
+
+:root[data-theme='dark'] .ad-status-progress,
+:root[data-theme='dark'] .md-status-progress,
+:root[data-theme='dark'] .cd-status-progress {
+  background: rgba(59, 130, 246, 0.18) !important;
+  color: #93c5fd !important;
+  border-color: rgba(59, 130, 246, 0.34) !important;
+}
+
+:root[data-theme='dark'] .ad-status-pending,
+:root[data-theme='dark'] .md-status-pending,
+:root[data-theme='dark'] .cd-status-pending {
+  background: rgba(245, 158, 11, 0.16) !important;
+  color: #fcd34d !important;
+  border-color: rgba(245, 158, 11, 0.32) !important;
+}
+
+:root[data-theme='dark'] .ad-status-cancelled,
+:root[data-theme='dark'] .md-status-cancelled,
+:root[data-theme='dark'] .cd-status-cancelled {
+  background: rgba(239, 68, 68, 0.16) !important;
+  color: #fca5a5 !important;
+  border-color: rgba(239, 68, 68, 0.34) !important;
+}
