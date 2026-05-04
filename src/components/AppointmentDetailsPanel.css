@@ -570,6 +570,185 @@
   border-color: #cbd5e1;
 }
 
+/* ── Dark Theme ── */
+:root[data-theme='dark'] .adp-overlay,
+.theme-dark .adp-overlay {
+  background: rgba(2, 8, 23, 0.64);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+:root[data-theme='dark'] .adp-panel,
+.theme-dark .adp-panel {
+  background:
+    radial-gradient(circle at 12% 18%, rgba(37, 99, 235, 0.22), transparent 34%),
+    linear-gradient(180deg, #10213a 0%, #0b1728 42%, #07111f 100%);
+  box-shadow: -18px 0 60px rgba(0, 0, 0, 0.45);
+  color: #eaf2ff;
+}
+
+:root[data-theme='dark'] .adp-header,
+.theme-dark .adp-header {
+  background:
+    linear-gradient(135deg, rgba(30, 58, 95, 0.96) 0%, rgba(37, 99, 235, 0.92) 100%),
+    #13264a;
+  border-bottom: 1px solid rgba(147, 197, 253, 0.16);
+}
+
+:root[data-theme='dark'] .adp-close-btn,
+.theme-dark .adp-close-btn {
+  background: rgba(255, 255, 255, 0.14);
+  border: 1px solid rgba(219, 234, 254, 0.18);
+  color: #ffffff;
+}
+
+:root[data-theme='dark'] .adp-close-btn:hover,
+.theme-dark .adp-close-btn:hover {
+  background: rgba(255, 255, 255, 0.24);
+}
+
+:root[data-theme='dark'] .adp-content,
+.theme-dark .adp-content {
+  background: transparent;
+}
+
+:root[data-theme='dark'] .adp-section,
+.theme-dark .adp-section {
+  background: rgba(15, 28, 49, 0.94);
+  border-color: rgba(147, 197, 253, 0.18);
+  box-shadow: 0 18px 42px rgba(0, 0, 0, 0.24);
+}
+
+:root[data-theme='dark'] .adp-section-title,
+.theme-dark .adp-section-title {
+  color: #dbeafe;
+}
+
+:root[data-theme='dark'] .adp-section-title svg,
+.theme-dark .adp-section-title svg {
+  color: #60a5fa;
+}
+
+:root[data-theme='dark'] .adp-info-item,
+.theme-dark .adp-info-item,
+:root[data-theme='dark'] .adp-assign-mechanic,
+.theme-dark .adp-assign-mechanic {
+  background: rgba(19, 39, 67, 0.92);
+  border-color: rgba(147, 197, 253, 0.18);
+}
+
+:root[data-theme='dark'] .adp-info-label,
+.theme-dark .adp-info-label,
+:root[data-theme='dark'] .adp-assign-label,
+.theme-dark .adp-assign-label {
+  color: #93a9c7;
+}
+
+:root[data-theme='dark'] .adp-info-value,
+.theme-dark .adp-info-value {
+  color: #f8fbff;
+}
+
+:root[data-theme='dark'] .adp-issue,
+.theme-dark .adp-issue {
+  background: rgba(10, 22, 38, 0.84);
+  border-color: rgba(147, 197, 253, 0.2);
+  color: #eaf2ff;
+}
+
+:root[data-theme='dark'] .adp-unassigned,
+.theme-dark .adp-unassigned,
+:root[data-theme='dark'] .adp-placeholder,
+.theme-dark .adp-placeholder,
+:root[data-theme='dark'] .adp-mechanic-empty,
+.theme-dark .adp-mechanic-empty {
+  color: #8ea4c4;
+}
+
+:root[data-theme='dark'] .adp-mechanic-trigger,
+.theme-dark .adp-mechanic-trigger,
+:root[data-theme='dark'] .adp-mechanic-menu,
+.theme-dark .adp-mechanic-menu {
+  background: #0f1f36;
+  border-color: rgba(147, 197, 253, 0.24);
+  color: #f8fbff;
+}
+
+:root[data-theme='dark'] .adp-mechanic-trigger:hover,
+:root[data-theme='dark'] .adp-mechanic-trigger.adp-open,
+.theme-dark .adp-mechanic-trigger:hover,
+.theme-dark .adp-mechanic-trigger.adp-open {
+  border-color: #60a5fa;
+  box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.14);
+}
+
+:root[data-theme='dark'] .adp-chevron,
+.theme-dark .adp-chevron,
+:root[data-theme='dark'] .adp-mechanic-id,
+.theme-dark .adp-mechanic-id {
+  color: #9fb4d2;
+}
+
+:root[data-theme='dark'] .adp-mechanic-name,
+.theme-dark .adp-mechanic-name {
+  color: #f8fbff;
+}
+
+:root[data-theme='dark'] .adp-mechanic-avatar,
+.theme-dark .adp-mechanic-avatar {
+  background: rgba(37, 99, 235, 0.22);
+  color: #93c5fd;
+}
+
+:root[data-theme='dark'] .adp-mechanic-option,
+.theme-dark .adp-mechanic-option {
+  color: #eaf2ff;
+}
+
+:root[data-theme='dark'] .adp-mechanic-option:hover,
+:root[data-theme='dark'] .adp-mechanic-option.adp-selected,
+.theme-dark .adp-mechanic-option:hover,
+.theme-dark .adp-mechanic-option.adp-selected {
+  background: rgba(37, 99, 235, 0.22);
+}
+
+:root[data-theme='dark'] .adp-status-btn,
+.theme-dark .adp-status-btn {
+  background: rgba(19, 39, 67, 0.92);
+  border-color: rgba(147, 197, 253, 0.18);
+  color: #dbeafe;
+}
+
+:root[data-theme='dark'] .adp-status-btn:hover:not(:disabled),
+.theme-dark .adp-status-btn:hover:not(:disabled) {
+  border-color: rgba(147, 197, 253, 0.42);
+  background: rgba(37, 99, 235, 0.16);
+}
+
+:root[data-theme='dark'] .adp-status-btn:disabled,
+.theme-dark .adp-status-btn:disabled {
+  opacity: 0.48;
+}
+
+:root[data-theme='dark'] .adp-footer,
+.theme-dark .adp-footer {
+  background: rgba(7, 17, 31, 0.96);
+  border-top-color: rgba(147, 197, 253, 0.16);
+}
+
+:root[data-theme='dark'] .adp-btn-secondary,
+.theme-dark .adp-btn-secondary {
+  background: #0f1f36;
+  border-color: rgba(147, 197, 253, 0.24);
+  color: #eaf2ff;
+}
+
+:root[data-theme='dark'] .adp-btn-secondary:hover,
+.theme-dark .adp-btn-secondary:hover {
+  background: #132743;
+  border-color: rgba(147, 197, 253, 0.36);
+}
+
 /* ── Responsive ── */
 @media (max-width: 640px) {
   .adp-panel {
