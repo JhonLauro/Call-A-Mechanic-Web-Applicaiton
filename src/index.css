@@ -750,6 +750,25 @@ code {
   background-color: transparent !important;
 }
 
+:root[data-theme='dark'] .cd-table td,
+:root[data-theme='dark'] .cd-table td *,
+:root[data-theme='dark'] .cd-table-jobid,
+:root[data-theme='dark'] .ad-table td,
+:root[data-theme='dark'] .ad-table td *,
+:root[data-theme='dark'] .md-table td,
+:root[data-theme='dark'] .md-table td *,
+:root[data-theme='dark'] .ur-table td,
+:root[data-theme='dark'] .ur-table td * {
+  color: #dbeafe !important;
+}
+
+:root[data-theme='dark'] .cd-table th,
+:root[data-theme='dark'] .ad-table th,
+:root[data-theme='dark'] .md-table th,
+:root[data-theme='dark'] .ur-table th {
+  color: #93c5fd !important;
+}
+
 :root[data-theme='dark'] .pp-sidebar-btn,
 :root[data-theme='dark'] .pp-edit-btn,
 :root[data-theme='dark'] .ap-edit-profile-btn,
@@ -762,14 +781,39 @@ code {
   color: var(--cam-text-soft) !important;
 }
 
+:root[data-theme='dark'] .ba-back-btn,
+:root[data-theme='dark'] .vm-back-btn,
+:root[data-theme='dark'] .ba-btn-secondary,
+:root[data-theme='dark'] .vm-btn-secondary,
+:root[data-theme='dark'] .vm-form-close,
+:root[data-theme='dark'] .vm-action-btn,
+:root[data-theme='dark'] .vm-action-delete,
+:root[data-theme='dark'] .pp-vehicle-action {
+  background: var(--cam-surface-soft) !important;
+  border-color: var(--cam-border) !important;
+  color: var(--cam-text-soft) !important;
+}
+
 :root[data-theme='dark'] .pp-sidebar-btn:hover,
 :root[data-theme='dark'] .pp-edit-btn:hover,
 :root[data-theme='dark'] .ap-edit-profile-btn:hover,
 :root[data-theme='dark'] .ap-change-password-btn:hover,
-:root[data-theme='dark'] .ur-back-btn:hover {
+:root[data-theme='dark'] .ur-back-btn:hover,
+:root[data-theme='dark'] .ba-back-btn:hover,
+:root[data-theme='dark'] .vm-back-btn:hover,
+:root[data-theme='dark'] .ba-btn-secondary:hover,
+:root[data-theme='dark'] .vm-btn-secondary:hover,
+:root[data-theme='dark'] .vm-form-close:hover,
+:root[data-theme='dark'] .pp-vehicle-action:hover {
   background: var(--cam-surface-muted) !important;
   border-color: rgba(96, 165, 250, 0.38) !important;
   color: var(--cam-text) !important;
+}
+
+:root[data-theme='dark'] .vm-action-delete:hover {
+  background: rgba(239, 68, 68, 0.14) !important;
+  border-color: rgba(239, 68, 68, 0.34) !important;
+  color: #fca5a5 !important;
 }
 
 :root[data-theme='dark'] .ap-logout-btn:hover,
@@ -834,4 +878,53 @@ code {
   background: rgba(96, 165, 250, 0.12) !important;
   border-color: rgba(96, 165, 250, 0.22) !important;
   color: #bfdbfe !important;
+}
+
+:root[data-theme='dark'] .vm-title,
+:root[data-theme='dark'] .vm-form-title,
+:root[data-theme='dark'] .vm-section-title,
+:root[data-theme='dark'] .vm-vehicle-name,
+:root[data-theme='dark'] .ba-title {
+  color: var(--cam-text) !important;
+}
+
+:root[data-theme='dark'] .vm-subtitle,
+:root[data-theme='dark'] .vm-vehicle-year,
+:root[data-theme='dark'] .vm-vehicle-detail,
+:root[data-theme='dark'] .ba-subtitle,
+:root[data-theme='dark'] .ba-hint {
+  color: var(--cam-muted) !important;
+}
+
+:root[data-theme='dark'] .vm-label,
+:root[data-theme='dark'] .ba-label {
+  color: #dbeafe !important;
+}
+
+:root[data-theme='dark'] .vm-count {
+  background: rgba(96, 165, 250, 0.14) !important;
+  color: #bfdbfe !important;
+}
+
+:root[data-theme='dark'] .cd-table-status.cd-status-finished,
+:root[data-theme='dark'] .cd-table-status.cd-status-fixed,
+:root[data-theme='dark'] .cd-status-finished,
+:root[data-theme='dark'] .cd-status-fixed {
+  background: rgba(34, 197, 94, 0.16) !important;
+  color: #86efac !important;
+  border-color: rgba(34, 197, 94, 0.32) !important;
+}
+
+:root[data-theme='dark'] .cd-table-status.cd-status-progress,
+:root[data-theme='dark'] .cd-status-progress {
+  background: rgba(59, 130, 246, 0.18) !important;
+  color: #93c5fd !important;
+  border-color: rgba(59, 130, 246, 0.34) !important;
+}
+
+:root[data-theme='dark'] .cd-table-status.cd-status-pending,
+:root[data-theme='dark'] .cd-status-pending {
+  background: rgba(245, 158, 11, 0.16) !important;
+  color: #fcd34d !important;
+  border-color: rgba(245, 158, 11, 0.32) !important;
 }

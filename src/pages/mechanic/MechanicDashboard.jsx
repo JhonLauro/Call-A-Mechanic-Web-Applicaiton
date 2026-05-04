@@ -329,12 +329,6 @@ const MechanicDashboard = () => {
           </div>
         </div>
 
-        <div className="md-actions">
-          <button className="md-btn-primary" type="button" onClick={() => navigate('/profile')}>
-            My Profile
-          </button>
-        </div>
-
         <section className="md-section">
           <div className="md-section-header">
             <h2 className="md-section-title">New Service Requests</h2>
