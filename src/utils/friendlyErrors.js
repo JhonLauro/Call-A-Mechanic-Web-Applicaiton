@@ -14,22 +14,27 @@ export const friendlyErrorMessage = (
     return 'Request timed out. Please try again.';
   }
 
+  if (
+    message.includes('bad credentials') ||
+    message.includes('invalid credentials') ||
+    message.includes('identifier or password') ||
+    message.includes('check your credentials')
+  ) {
+    return 'Invalid credentials.';
+  }
+
+  if (message.includes('jwt') || message.includes('token') || message.includes('session')) {
+    return 'Session expired. Please sign in again.';
+  }
+
   if (status === 400) return fallback;
-  if (status === 401) return 'Unauthorized. Please sign in again.';
-  if (status === 403) return 'Forbidden. You do not have permission to perform this action.';
+  if (status === 401) return 'Session expired. Please sign in again.';
+  if (status === 403) return 'Access denied. You do not have permission to perform this action.';
   if (status === 404) return 'Not found. The requested resource could not be found.';
   if (status === 409) return 'Conflict. This information already exists.';
   if (status === 422) return 'Validation failed. Please review your input.';
   if (status === 429) return 'Too many requests. Please try again later.';
   if (status >= 500) return 'Service unavailable. Please try again later.';
-
-  if (
-    message.includes('bad credentials') ||
-    message.includes('invalid credentials') ||
-    message.includes('identifier or password')
-  ) {
-    return 'Invalid credentials.';
-  }
 
   if (message.includes('email') && (message.includes('exists') || message.includes('already'))) {
     return 'Email already exists.';
@@ -41,10 +46,6 @@ export const friendlyErrorMessage = (
 
   if (message.includes('duplicate') || message.includes('constraint')) {
     return 'Duplicate entry. Please review your input.';
-  }
-
-  if (message.includes('jwt') || message.includes('token')) {
-    return 'Unauthorized. Please sign in again.';
   }
 
   if (
