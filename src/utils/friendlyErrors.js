@@ -1,46 +1,50 @@
 export const friendlyErrorMessage = (
   error,
-  fallback = "We couldn't complete that request. Please try again."
+  fallback = 'Request failed. Please try again.'
 ) => {
   const status = error?.status;
   const rawMessage = String(error?.message || '').trim();
   const message = rawMessage.toLowerCase();
 
   if (rawMessage === 'Failed to fetch' || message.includes('networkerror')) {
-    return "We couldn't reach the server. Please check your connection.";
+    return 'Network error. Please check your connection.';
   }
 
   if (message.includes('timeout') || message.includes('timed out')) {
-    return 'The server is taking longer than expected. Please try again in a moment.';
+    return 'Request timed out. Please try again.';
   }
 
-  if (status === 401) return 'Your session has expired. Please sign in again.';
-  if (status === 403) return "You don't have permission to perform this action.";
-  if (status === 404) return "We couldn't find the requested information.";
-  if (status >= 500) return 'The service is temporarily unavailable. Please try again shortly.';
+  if (status === 400) return fallback;
+  if (status === 401) return 'Unauthorized. Please sign in again.';
+  if (status === 403) return 'Forbidden. You do not have permission to perform this action.';
+  if (status === 404) return 'Not found. The requested resource could not be found.';
+  if (status === 409) return 'Conflict. This information already exists.';
+  if (status === 422) return 'Validation failed. Please review your input.';
+  if (status === 429) return 'Too many requests. Please try again later.';
+  if (status >= 500) return 'Service unavailable. Please try again later.';
 
   if (
     message.includes('bad credentials') ||
     message.includes('invalid credentials') ||
     message.includes('identifier or password')
   ) {
-    return 'The ID or password you entered is incorrect.';
+    return 'Invalid credentials.';
   }
 
   if (message.includes('email') && (message.includes('exists') || message.includes('already'))) {
-    return 'An account with this email already exists.';
+    return 'Email already exists.';
   }
 
   if (message.includes('mechanic') && message.includes('exists')) {
-    return 'A mechanic with this ID already exists.';
+    return 'Mechanic ID already exists.';
   }
 
   if (message.includes('duplicate') || message.includes('constraint')) {
-    return 'This information already exists. Please review your details.';
+    return 'Duplicate entry. Please review your input.';
   }
 
   if (message.includes('jwt') || message.includes('token')) {
-    return 'Your session has expired. Please sign in again.';
+    return 'Unauthorized. Please sign in again.';
   }
 
   if (
