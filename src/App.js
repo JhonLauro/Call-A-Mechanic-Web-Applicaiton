@@ -14,6 +14,7 @@ import EditProfilePage from './pages/profile/EditProfilePage';
 import EditPasswordPage from './pages/profile/EditPasswordPage';
 import UploadPhotoPage from './pages/profile/UploadPhotoPage';
 import UserRegistryPage from './pages/admin/UserRegistryPage';
+import LoadingScreen from './components/LoadingScreen';
 
 const VALID_ROLES = ['CLIENT', 'ADMIN', 'MECHANIC'];
 
@@ -28,22 +29,6 @@ const getDashboardPathForRole = (user) => {
   if (role === 'MECHANIC') return '/mechanic/dashboard';
   return '/client/dashboard';
 };
-
-const LoadingScreen = () => (
-  <div
-    style={{
-      minHeight: '100vh',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      fontFamily: 'system-ui, sans-serif',
-      color: '#6b7280',
-      fontSize: '15px',
-    }}
-  >
-    Loading...
-  </div>
-);
 
 const PAGE_TITLES = [
   { pattern: /^\/$/, title: 'Home' },

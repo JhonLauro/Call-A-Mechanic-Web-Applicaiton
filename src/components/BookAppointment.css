@@ -373,3 +373,17 @@
     font-size: 13px;
   }
 }
+
+:root[data-theme='dark'] .ba-back-btn,
+:root[data-theme='dark'] .ba-btn-secondary {
+  background: var(--cam-surface-soft);
+  border-color: var(--cam-border);
+  color: var(--cam-text-soft);
+}
+
+:root[data-theme='dark'] .ba-back-btn:hover,
+:root[data-theme='dark'] .ba-btn-secondary:hover {
+  background: var(--cam-surface-muted);
+  border-color: rgba(96, 165, 250, 0.38);
+  color: var(--cam-text);
+}

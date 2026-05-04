@@ -610,3 +610,27 @@
     padding: 10px;
   }
 }
+
+:root[data-theme='dark'] .ap-back-btn,
+:root[data-theme='dark'] .ap-change-password-btn,
+:root[data-theme='dark'] .ap-edit-profile-btn,
+:root[data-theme='dark'] .ap-btn-secondary {
+  background: var(--cam-surface-soft);
+  border-color: var(--cam-border);
+  color: var(--cam-text-soft);
+}
+
+:root[data-theme='dark'] .ap-back-btn:hover,
+:root[data-theme='dark'] .ap-change-password-btn:hover,
+:root[data-theme='dark'] .ap-edit-profile-btn:hover,
+:root[data-theme='dark'] .ap-btn-secondary:hover {
+  background: var(--cam-surface-muted);
+  border-color: rgba(96, 165, 250, 0.38);
+  color: var(--cam-text);
+}
+
+:root[data-theme='dark'] .ap-logout-btn {
+  background: var(--cam-surface-soft);
+  border-color: rgba(239, 68, 68, 0.34);
+  color: #fca5a5;
+}

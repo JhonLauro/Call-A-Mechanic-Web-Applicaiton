@@ -7,6 +7,7 @@ import AppointmentDetailsPanel from '../../components/AppointmentDetailsPanel';
 import Snackbar from '../../components/Snackbar';
 import LoadingScreen from '../../components/LoadingScreen';
 import ThemeToggle from '../../components/ThemeToggle';
+import NotificationBell from '../../components/NotificationBell';
 import './MechanicDashboard.css';
 
 const normalizeStatus = (status) => (status === 'COMPLETED' ? 'FINISHED' : status);
@@ -156,6 +157,39 @@ const MechanicDashboard = () => {
   const inProgressJobs = myAssignedJobs.filter((appointment) => normalizeStatus(appointment.status) === 'IN_PROGRESS');
   const finishedJobs = myAssignedJobs.filter((appointment) => normalizeStatus(appointment.status) === 'FINISHED');
 
+  const notificationItems = [
+    ...newServiceRequests.slice(0, 4).map((appointment) => {
+      const item = getDisplayAppointment(appointment);
+      return {
+        id: `mechanic-new-${item.id}`,
+        title: 'New service request',
+        message: `${item.clientName} needs ${item.serviceType || item.issue} for ${item.vehicle}.`,
+        time: item.appointmentDate,
+        tone: 'warning',
+      };
+    }),
+    ...inProgressJobs.slice(0, 3).map((appointment) => {
+      const item = getDisplayAppointment(appointment);
+      return {
+        id: `mechanic-progress-${item.id}`,
+        title: 'Repair in progress',
+        message: `${item.vehicle} is currently assigned to you.`,
+        time: item.appointmentDate,
+        tone: 'info',
+      };
+    }),
+    ...finishedJobs.slice(0, 2).map((appointment) => {
+      const item = getDisplayAppointment(appointment);
+      return {
+        id: `mechanic-finished-${item.id}`,
+        title: 'Job finished',
+        message: `${item.vehicle} has been marked finished.`,
+        time: item.appointmentDate,
+        tone: 'success',
+      };
+    }),
+  ].slice(0, 7);
+
   const handleClaimJob = async (appointmentId) => {
     if (!token) return;
 
@@ -227,13 +261,7 @@ const MechanicDashboard = () => {
           </div>
 
           <div className="md-user-menu">
-            <button className="md-icon-btn" type="button">
-              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
-                <path d="M13.73 21a2 2 0 0 1-3.46 0" />
-              </svg>
-              <span className="md-notification-badge">{newServiceRequests.length}</span>
-            </button>
+            <NotificationBell items={notificationItems} />
             <ThemeToggle />
 
             <div className="md-user-menu-wrapper">

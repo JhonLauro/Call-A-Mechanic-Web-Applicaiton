@@ -9,6 +9,7 @@ import AppointmentDetailsPanel from '../../components/AppointmentDetailsPanel';
 import Snackbar from '../../components/Snackbar';
 import LoadingScreen from '../../components/LoadingScreen';
 import ThemeToggle from '../../components/ThemeToggle';
+import NotificationBell from '../../components/NotificationBell';
 import './AdminDashboard.css';
 
 const AdminDashboard = () => {
@@ -134,6 +135,45 @@ const AdminDashboard = () => {
     .filter(apt => isFinishedStatus(apt.status))
     .sort(sortNewestFirst);
 
+  const notificationItems = [
+    ...appointments
+      .filter((apt) => apt.status === 'PENDING' && !apt.mechanic)
+      .slice(0, 4)
+      .map((apt) => ({
+        id: `admin-pending-${apt.id}`,
+        title: 'Appointment needs assignment',
+        message: `${apt.client?.fullName || 'A client'} booked ${apt.serviceType || 'a service'} for ${apt.vehicleInfo || 'a vehicle'}.`,
+        time: apt.scheduledDate
+          ? new Date(apt.scheduledDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
+          : 'Pending',
+        tone: 'warning',
+      })),
+    ...appointments
+      .filter((apt) => apt.status === 'IN_PROGRESS')
+      .slice(0, 3)
+      .map((apt) => ({
+        id: `admin-progress-${apt.id}`,
+        title: 'Repair in progress',
+        message: `${apt.mechanic?.fullName || 'A mechanic'} is handling ${apt.vehicleInfo || 'a vehicle'}.`,
+        time: apt.scheduledDate
+          ? new Date(apt.scheduledDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
+          : 'Active',
+        tone: 'info',
+      })),
+    ...appointments
+      .filter((apt) => apt.status === 'FINISHED' || apt.status === 'COMPLETED')
+      .slice(0, 2)
+      .map((apt) => ({
+        id: `admin-finished-${apt.id}`,
+        title: 'Service completed',
+        message: `${apt.vehicleInfo || 'A vehicle'} was marked finished by ${apt.mechanic?.fullName || 'the mechanic'}.`,
+        time: apt.scheduledDate
+          ? new Date(apt.scheduledDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
+          : 'Done',
+        tone: 'success',
+      })),
+  ].slice(0, 8);
+
   // Update appointment status
   const handleStatusUpdate = async (appointmentId, newStatus) => {
     try {
@@ -230,13 +270,7 @@ const AdminDashboard = () => {
           <span className="ad-admin-badge">Admin</span>
         </div>
         <div className="ad-header-right">
-          <button className="ad-icon-btn">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
-              <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
-            </svg>
-            <span className="ad-notification-badge">{stats.pendingJobs}</span>
-          </button>
+          <NotificationBell items={notificationItems} />
           <ThemeToggle />
           <div className="ad-user-menu-wrapper">
             <button

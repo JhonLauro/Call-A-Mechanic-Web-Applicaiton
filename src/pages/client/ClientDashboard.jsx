@@ -9,6 +9,7 @@ import BookAppointment from '../../components/BookAppointment';
 import Snackbar from '../../components/Snackbar';
 import LoadingScreen from '../../components/LoadingScreen';
 import ThemeToggle from '../../components/ThemeToggle';
+import NotificationBell from '../../components/NotificationBell';
 import './ClientDashboard.css';
 
 const ClientDashboard = () => {
@@ -142,6 +143,36 @@ const ClientDashboard = () => {
     showMessage('Appointment booked successfully!');
   };
 
+  const notificationItems = [
+    ...activeAppointments.slice(0, 3).map((apt) => ({
+      id: `client-active-${apt.id}`,
+      title: apt.status === 'IN_PROGRESS' ? 'Service in progress' : 'Appointment awaiting assignment',
+      message: `${apt.vehicleInfo || 'Your vehicle'} - ${apt.serviceType || apt.problemDescription || 'Service request'}`,
+      time: apt.scheduledDate
+        ? new Date(apt.scheduledDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
+        : 'Pending',
+      tone: apt.status === 'IN_PROGRESS' ? 'info' : 'warning',
+    })),
+    ...completedAppointments.slice(0, 3).map((apt) => ({
+      id: `client-finished-${apt.id}`,
+      title: 'Service completed',
+      message: `${apt.vehicleInfo || 'Your vehicle'} is marked finished. You can review it in service history.`,
+      time: apt.scheduledDate
+        ? new Date(apt.scheduledDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
+        : 'Done',
+      tone: 'success',
+    })),
+    ...(vehicles.length === 0
+      ? [{
+          id: 'client-no-vehicle',
+          title: 'Register a vehicle',
+          message: 'Add a vehicle first so booking can use a verified garage record.',
+          time: 'Action',
+          tone: 'warning',
+        }]
+      : []),
+  ].slice(0, 6);
+
   const userName = user?.fullName || 'User';
   const userInitials = userName.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2);
   const userPhoto = user?.photoUrl || user?.profilePhotoUrl || user?.avatarUrl || '';
@@ -160,13 +191,7 @@ const ClientDashboard = () => {
           <span className="cd-role-badge">Client</span>
         </div>
         <div className="cd-header-right">
-          <button className="cd-icon-btn">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
-              <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
-            </svg>
-            <span className="cd-notification-badge">2</span>
-          </button>
+          <NotificationBell items={notificationItems} />
           <ThemeToggle />
           <div className="cd-user-menu-wrapper">
             <button
