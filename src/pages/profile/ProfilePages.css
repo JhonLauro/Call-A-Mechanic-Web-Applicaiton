@@ -390,6 +390,29 @@
   color: #94a3b8;
 }
 
+.form-group input.input-error,
+.pp-form-group input.input-error {
+  border-color: #ef4444;
+  background: #fff;
+}
+
+.form-group input.input-error:focus,
+.pp-form-group input.input-error:focus {
+  outline: none;
+  border-color: #dc2626;
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.12);
+}
+
+.profile-card .field-error {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 7px;
+  color: #dc2626;
+  font-size: 12px;
+  font-weight: 600;
+}
+
 .pp-form-actions {
   display: flex;
   justify-content: flex-end;

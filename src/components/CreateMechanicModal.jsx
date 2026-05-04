@@ -73,7 +73,20 @@ const CreateMechanicModal = ({ isOpen, onClose, onSuccess }) => {
         if (onSuccess) onSuccess();
       }, 1500);
     } catch (err) {
-      setApiError(err.message || 'Failed to create mechanic. Please try again.');
+      const message = err.message || 'Failed to create mechanic. Please try again.';
+      if (message === 'Email already exists.' || message.toLowerCase().includes('email already')) {
+        setErrors(prev => ({
+          ...prev,
+          email: 'This email is already registered.',
+        }));
+      } else if (message === 'Mechanic ID already exists.' || message.toLowerCase().includes('mechanic id')) {
+        setErrors(prev => ({
+          ...prev,
+          mechanicId: 'This mechanic ID is already in use.',
+        }));
+      } else {
+        setApiError(message);
+      }
     } finally {
       setIsSubmitting(false);
     }

@@ -80,7 +80,15 @@ const EditPasswordPage = () => {
       setSuccess('Password updated successfully.');
       setForm({ currentPassword: '', newPassword: '', confirmPassword: '' });
     } catch (err) {
-      setError(err.message || 'Failed to update password.');
+      const message = err.message || 'Failed to update password.';
+      if (message.toLowerCase().includes('password')) {
+        setFieldErrors((prev) => ({
+          ...prev,
+          currentPassword: 'Current password is incorrect.',
+        }));
+      } else {
+        setError(message);
+      }
     } finally {
       setSaving(false);
     }
@@ -133,6 +141,7 @@ const EditPasswordPage = () => {
                   type="password"
                   value={form.currentPassword}
                   onChange={handleChange}
+                  className={fieldErrors.currentPassword ? 'input-error' : ''}
                   placeholder="Current password"
                 />
                 {fieldErrors.currentPassword && (
@@ -148,6 +157,7 @@ const EditPasswordPage = () => {
                   type="password"
                   value={form.newPassword}
                   onChange={handleChange}
+                  className={fieldErrors.newPassword ? 'input-error' : ''}
                   placeholder="At least 8 characters"
                 />
                 {fieldErrors.newPassword && (
@@ -163,6 +173,7 @@ const EditPasswordPage = () => {
                   type="password"
                   value={form.confirmPassword}
                   onChange={handleChange}
+                  className={fieldErrors.confirmPassword ? 'input-error' : ''}
                   placeholder="Repeat new password"
                 />
                 {fieldErrors.confirmPassword && (

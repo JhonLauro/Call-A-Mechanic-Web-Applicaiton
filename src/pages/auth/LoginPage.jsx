@@ -45,10 +45,16 @@ const LoginPage = () => {
       await login(form.identifier.trim(), form.password);
       navigate('/dashboard');
     } catch (err) {
-      if (err.message === 'Failed to fetch') {
+      const message = err.message || 'Login failed. Please try again.';
+      if (message === 'Invalid credentials.' || message.includes('ID or password')) {
+        setFieldErrors({
+          identifier: 'Check the email, mechanic ID, or admin ID you entered.',
+          password: 'Check your password and try again.',
+        });
+      } else if (err.message === 'Failed to fetch') {
         setApiError('Unable to reach the server. Please check your connection.');
       } else {
-        setApiError(err.message || 'Login failed. Please try again.');
+        setApiError(message);
       }
     } finally {
       setLoading(false);

@@ -161,6 +161,7 @@ const EditProfilePage = () => {
                     name="fullName"
                     value={form.fullName}
                     onChange={handleChange}
+                    className={fieldErrors.fullName ? 'input-error' : ''}
                     placeholder="Your full name"
                   />
                   {fieldErrors.fullName && (
@@ -187,6 +188,7 @@ const EditProfilePage = () => {
                     name="phoneNumber"
                     value={form.phoneNumber}
                     onChange={handleChange}
+                    className={fieldErrors.phoneNumber ? 'input-error' : ''}
                     placeholder="+1 555 000 0000"
                   />
                   {fieldErrors.phoneNumber && (

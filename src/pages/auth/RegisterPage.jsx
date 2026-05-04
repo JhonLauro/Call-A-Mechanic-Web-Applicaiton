@@ -81,10 +81,16 @@ const RegisterPage = () => {
       await register(payload);
       navigate('/dashboard');
     } catch (err) {
-      if (err.message === 'Failed to fetch') {
+      const message = err.message || 'Registration failed. Please try again.';
+      if (message === 'Email already exists.' || message.toLowerCase().includes('email already')) {
+        setFieldErrors((prev) => ({
+          ...prev,
+          email: 'This email is already registered. Use another email or sign in.',
+        }));
+      } else if (err.message === 'Failed to fetch') {
         setApiError('Unable to reach the server. Please check your connection.');
       } else {
-        setApiError(err.message || 'Registration failed. Please try again.');
+        setApiError(message);
       }
     } finally {
       setLoading(false);
