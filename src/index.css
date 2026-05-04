@@ -134,7 +134,8 @@ code {
 .md-header,
 .pp-header,
 .ap-header,
-.profile-topbar {
+.profile-topbar,
+.ur-header {
   background: color-mix(in srgb, var(--cam-surface) 94%, transparent);
   border-bottom-color: var(--cam-border);
   box-shadow: var(--cam-shadow-sm);
@@ -184,7 +185,6 @@ code {
 .md-card,
 .md-job-card,
 .pp-card,
-.pp-sidebar,
 .ap-card,
 .profile-card,
 .ba-container,
@@ -209,7 +209,8 @@ code {
 :root[data-theme='dark'] .md-header,
 :root[data-theme='dark'] .pp-header,
 :root[data-theme='dark'] .ap-header,
-:root[data-theme='dark'] .profile-topbar {
+:root[data-theme='dark'] .profile-topbar,
+:root[data-theme='dark'] .ur-header {
   background: rgba(16, 27, 45, 0.9);
   border-bottom-color: var(--cam-border);
   box-shadow: 0 10px 30px rgba(2, 6, 23, 0.28);
@@ -227,7 +228,6 @@ code {
 :root[data-theme='dark'] .md-card,
 :root[data-theme='dark'] .md-job-card,
 :root[data-theme='dark'] .pp-card,
-:root[data-theme='dark'] .pp-sidebar,
 :root[data-theme='dark'] .ap-card,
 :root[data-theme='dark'] .profile-card,
 :root[data-theme='dark'] .ba-container,
@@ -245,6 +245,12 @@ code {
   background: var(--cam-surface);
   border-color: var(--cam-border);
   box-shadow: var(--cam-shadow-md);
+}
+
+:root[data-theme='dark'] .pp-sidebar {
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
 }
 
 :root[data-theme='dark'] .cd-brand-name,
@@ -458,7 +464,8 @@ code {
 :root[data-theme='dark'] .md-header,
 :root[data-theme='dark'] .ap-header,
 :root[data-theme='dark'] .pp-header,
-:root[data-theme='dark'] .profile-topbar {
+:root[data-theme='dark'] .profile-topbar,
+:root[data-theme='dark'] .ur-header {
   background: rgba(12, 23, 40, 0.92) !important;
   border-color: rgba(148, 163, 184, 0.2) !important;
   box-shadow: 0 16px 40px rgba(2, 6, 23, 0.34) !important;
@@ -490,6 +497,7 @@ code {
 :root[data-theme='dark'] .ap-card,
 :root[data-theme='dark'] .ap-form-input,
 :root[data-theme='dark'] .ap-security-item,
+:root[data-theme='dark'] .ap-summary-stat,
 :root[data-theme='dark'] .pp-card,
 :root[data-theme='dark'] .pp-sidebar-card,
 :root[data-theme='dark'] .pp-vehicle-card,
@@ -649,4 +657,181 @@ code {
   background: rgba(239, 68, 68, 0.16) !important;
   color: #fca5a5 !important;
   border-color: rgba(239, 68, 68, 0.34) !important;
+}
+
+:root[data-theme='dark'] .cd-role-badge,
+:root[data-theme='dark'] .md-role-badge,
+:root[data-theme='dark'] .ap-badge-role,
+:root[data-theme='dark'] .pp-sidebar-role {
+  background: rgba(96, 165, 250, 0.14) !important;
+  border: 1px solid rgba(96, 165, 250, 0.3) !important;
+  color: #93c5fd !important;
+}
+
+:root[data-theme='dark'] .ad-admin-badge,
+:root[data-theme='dark'] .ap-admin-badge,
+:root[data-theme='dark'] .ur-admin-badge {
+  background: rgba(124, 58, 237, 0.22) !important;
+  border: 1px solid rgba(167, 139, 250, 0.34) !important;
+  color: #ddd6fe !important;
+}
+
+:root[data-theme='dark'] .ap-badge-status,
+:root[data-theme='dark'] .pp-status-active,
+:root[data-theme='dark'] .ur-status-active {
+  background: rgba(34, 197, 94, 0.16) !important;
+  border: 1px solid rgba(34, 197, 94, 0.3) !important;
+  color: #86efac !important;
+}
+
+:root[data-theme='dark'] .ur-status-inactive {
+  background: rgba(148, 163, 184, 0.13) !important;
+  border: 1px solid rgba(148, 163, 184, 0.18) !important;
+  color: #cbd5e1 !important;
+}
+
+:root[data-theme='dark'] .cd-stat-icon,
+:root[data-theme='dark'] .ad-stat-icon,
+:root[data-theme='dark'] .md-stat-icon,
+:root[data-theme='dark'] .ur-stat-icon,
+:root[data-theme='dark'] .cd-action-icon,
+:root[data-theme='dark'] .cd-action-icon-small,
+:root[data-theme='dark'] .pp-vehicle-icon,
+:root[data-theme='dark'] .pp-vehicles-empty-icon,
+:root[data-theme='dark'] .ap-security-icon {
+  background: rgba(96, 165, 250, 0.12) !important;
+  border: 1px solid rgba(96, 165, 250, 0.22) !important;
+}
+
+:root[data-theme='dark'] .md-stat-icon-blue,
+:root[data-theme='dark'] .ad-stat-icon-blue,
+:root[data-theme='dark'] .cd-stat-icon-blue,
+:root[data-theme='dark'] .ur-stat-icon-blue {
+  color: #60a5fa !important;
+}
+
+:root[data-theme='dark'] .md-stat-icon-indigo,
+:root[data-theme='dark'] .ad-stat-icon-indigo {
+  color: #a5b4fc !important;
+}
+
+:root[data-theme='dark'] .md-stat-icon-yellow,
+:root[data-theme='dark'] .ad-stat-icon-yellow {
+  color: #fcd34d !important;
+}
+
+:root[data-theme='dark'] .md-stat-icon-green,
+:root[data-theme='dark'] .ad-stat-icon-green,
+:root[data-theme='dark'] .cd-stat-icon-green,
+:root[data-theme='dark'] .ur-stat-icon-green {
+  color: #86efac !important;
+}
+
+:root[data-theme='dark'] .ur-table-container,
+:root[data-theme='dark'] .cd-table-container,
+:root[data-theme='dark'] .ad-table-container,
+:root[data-theme='dark'] .md-card {
+  background: var(--cam-surface) !important;
+  border-color: var(--cam-border) !important;
+}
+
+:root[data-theme='dark'] .ur-table tbody,
+:root[data-theme='dark'] .ur-table tr,
+:root[data-theme='dark'] .ur-table td,
+:root[data-theme='dark'] .cd-table tbody,
+:root[data-theme='dark'] .cd-table tr,
+:root[data-theme='dark'] .cd-table td,
+:root[data-theme='dark'] .ad-table tbody,
+:root[data-theme='dark'] .ad-table tr,
+:root[data-theme='dark'] .ad-table td,
+:root[data-theme='dark'] .md-table tbody,
+:root[data-theme='dark'] .md-table tr,
+:root[data-theme='dark'] .md-table td {
+  background-color: transparent !important;
+}
+
+:root[data-theme='dark'] .pp-sidebar-btn,
+:root[data-theme='dark'] .pp-edit-btn,
+:root[data-theme='dark'] .ap-edit-profile-btn,
+:root[data-theme='dark'] .ap-change-password-btn,
+:root[data-theme='dark'] .ap-logout-btn,
+:root[data-theme='dark'] .pp-logout-btn,
+:root[data-theme='dark'] .ur-back-btn {
+  background: var(--cam-surface-soft) !important;
+  border-color: var(--cam-border) !important;
+  color: var(--cam-text-soft) !important;
+}
+
+:root[data-theme='dark'] .pp-sidebar-btn:hover,
+:root[data-theme='dark'] .pp-edit-btn:hover,
+:root[data-theme='dark'] .ap-edit-profile-btn:hover,
+:root[data-theme='dark'] .ap-change-password-btn:hover,
+:root[data-theme='dark'] .ur-back-btn:hover {
+  background: var(--cam-surface-muted) !important;
+  border-color: rgba(96, 165, 250, 0.38) !important;
+  color: var(--cam-text) !important;
+}
+
+:root[data-theme='dark'] .ap-logout-btn:hover,
+:root[data-theme='dark'] .pp-logout-btn:hover,
+:root[data-theme='dark'] .cd-dropdown-item.cd-logout:hover,
+:root[data-theme='dark'] .ad-dropdown-item.ad-logout:hover,
+:root[data-theme='dark'] .md-dropdown-item.md-logout:hover {
+  background: rgba(239, 68, 68, 0.14) !important;
+  border-color: rgba(239, 68, 68, 0.34) !important;
+  color: #fca5a5 !important;
+}
+
+:root[data-theme='dark'] .ap-card-header,
+:root[data-theme='dark'] .pp-card-header,
+:root[data-theme='dark'] .ap-form-actions,
+:root[data-theme='dark'] .pp-form-actions,
+:root[data-theme='dark'] .ap-logout-section,
+:root[data-theme='dark'] .pp-sidebar-info,
+:root[data-theme='dark'] .ur-modal-actions {
+  border-color: rgba(148, 163, 184, 0.18) !important;
+}
+
+:root[data-theme='dark'] .pp-sidebar-avatar,
+:root[data-theme='dark'] .pp-sidebar-avatar-placeholder,
+:root[data-theme='dark'] .ap-profile-avatar,
+:root[data-theme='dark'] .ap-profile-avatar-placeholder {
+  border-color: #172a45 !important;
+  box-shadow: 0 0 0 2px rgba(147, 197, 253, 0.55) !important;
+}
+
+:root[data-theme='dark'] .pp-sidebar-info-item,
+:root[data-theme='dark'] .pp-vehicle-meta,
+:root[data-theme='dark'] .pp-vehicle-summary,
+:root[data-theme='dark'] .ap-security-label,
+:root[data-theme='dark'] .ur-page-subtitle,
+:root[data-theme='dark'] .ur-stat-label,
+:root[data-theme='dark'] .ur-section-count {
+  color: var(--cam-muted) !important;
+}
+
+:root[data-theme='dark'] .pp-vehicle-name,
+:root[data-theme='dark'] .ap-card-title,
+:root[data-theme='dark'] .ap-profile-name,
+:root[data-theme='dark'] .ap-security-value,
+:root[data-theme='dark'] .ur-page-title,
+:root[data-theme='dark'] .ur-section-title,
+:root[data-theme='dark'] .ur-stat-value,
+:root[data-theme='dark'] .ur-table-jobs,
+:root[data-theme='dark'] .cd-action-title,
+:root[data-theme='dark'] .cd-action-title-small {
+  color: var(--cam-text) !important;
+}
+
+:root[data-theme='dark'] .cd-action-primary {
+  background:
+    radial-gradient(circle at 20% 0%, rgba(37, 99, 235, 0.2), transparent 42%),
+    var(--cam-surface) !important;
+  border-color: var(--cam-border) !important;
+}
+
+:root[data-theme='dark'] .cd-action-tag {
+  background: rgba(96, 165, 250, 0.12) !important;
+  border-color: rgba(96, 165, 250, 0.22) !important;
+  color: #bfdbfe !important;
 }
