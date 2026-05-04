@@ -74,6 +74,20 @@ const AppointmentDetailsPanel = ({
               {formatStatus(appointment.status)}
             </span>
           </div>
+          <div className="adp-summary-strip" aria-label="Appointment summary">
+            <div className="adp-summary-card">
+              <span className="adp-summary-label">Service</span>
+              <strong>{appointment.serviceType || 'Service request'}</strong>
+            </div>
+            <div className="adp-summary-card">
+              <span className="adp-summary-label">Schedule</span>
+              <strong>{appointment.appointmentDate || 'Not scheduled'}</strong>
+            </div>
+            <div className="adp-summary-card">
+              <span className="adp-summary-label">Mechanic</span>
+              <strong>{appointment.mechanic || 'Unassigned'}</strong>
+            </div>
+          </div>
         </div>
 
         {/* Content */}
