@@ -8,6 +8,7 @@ import VehicleManagement from '../../components/VehicleManagement';
 import BookAppointment from '../../components/BookAppointment';
 import Snackbar from '../../components/Snackbar';
 import LoadingScreen from '../../components/LoadingScreen';
+import ThemeToggle from '../../components/ThemeToggle';
 import './ClientDashboard.css';
 
 const ClientDashboard = () => {
@@ -165,6 +166,7 @@ const ClientDashboard = () => {
             </svg>
             <span className="cd-notification-badge">2</span>
           </button>
+          <ThemeToggle />
           <button className="cd-icon-btn">
             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <circle cx="12" cy="12" r="3"/>

@@ -12,7 +12,8 @@ html, body {
   overflow-y: auto;
   scrollbar-width: none;
   -ms-overflow-style: none;
-  background: #eaf3ff;
+  background: var(--cam-body-bg);
+  transition: background 0.28s ease, color 0.28s ease;
 }
 
 html::-webkit-scrollbar,
@@ -30,12 +31,49 @@ body {
 }
 
 :root {
+  --cam-body-bg: #e6f1ff;
+  --cam-surface: #ffffff;
+  --cam-surface-soft: #f8fbff;
+  --cam-surface-muted: #f1f6ff;
+  --cam-border: #d4e2f4;
+  --cam-border-strong: #b8cbe5;
+  --cam-text: #0f172a;
+  --cam-text-soft: #334155;
+  --cam-muted: #64748b;
+  --cam-primary: #2563eb;
+  --cam-primary-soft: #eff6ff;
+  --cam-shadow-sm: 0 1px 3px rgba(15, 23, 42, 0.06);
+  --cam-shadow-md: 0 14px 40px rgba(37, 99, 235, 0.1);
   --cam-page-background:
-    radial-gradient(circle at 8% 88%, rgba(47, 107, 255, 0.2) 0%, rgba(47, 107, 255, 0.08) 24%, transparent 48%),
-    linear-gradient(45deg, #dcecff 0%, #edf5ff 48%, #fbfdff 100%);
+    radial-gradient(circle at 6% 90%, rgba(37, 99, 235, 0.24) 0%, rgba(96, 165, 250, 0.12) 27%, transparent 50%),
+    radial-gradient(circle at 88% 14%, rgba(191, 219, 254, 0.54) 0%, transparent 36%),
+    linear-gradient(45deg, #dbeafe 0%, #edf6ff 48%, #f8fbff 100%);
   --cam-page-texture:
     linear-gradient(90deg, rgba(47, 107, 255, 0.045) 1px, transparent 1px),
     linear-gradient(180deg, rgba(47, 107, 255, 0.04) 1px, transparent 1px);
+}
+
+:root[data-theme='dark'] {
+  --cam-body-bg: #08111f;
+  --cam-surface: #101b2d;
+  --cam-surface-soft: #132238;
+  --cam-surface-muted: #172a45;
+  --cam-border: rgba(148, 163, 184, 0.22);
+  --cam-border-strong: rgba(148, 163, 184, 0.34);
+  --cam-text: #eef5ff;
+  --cam-text-soft: #cbd5e1;
+  --cam-muted: #94a3b8;
+  --cam-primary: #60a5fa;
+  --cam-primary-soft: rgba(37, 99, 235, 0.16);
+  --cam-shadow-sm: 0 1px 3px rgba(2, 6, 23, 0.32);
+  --cam-shadow-md: 0 18px 48px rgba(2, 6, 23, 0.34);
+  --cam-page-background:
+    radial-gradient(circle at 8% 88%, rgba(37, 99, 235, 0.28) 0%, rgba(37, 99, 235, 0.12) 28%, transparent 52%),
+    radial-gradient(circle at 88% 10%, rgba(59, 130, 246, 0.16) 0%, transparent 34%),
+    linear-gradient(45deg, #08111f 0%, #0d1b2f 48%, #13243c 100%);
+  --cam-page-texture:
+    linear-gradient(90deg, rgba(147, 197, 253, 0.055) 1px, transparent 1px),
+    linear-gradient(180deg, rgba(147, 197, 253, 0.045) 1px, transparent 1px);
 }
 
 .landing-page,
@@ -88,4 +126,322 @@ body {
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+}
+
+/* Theme-aware application surfaces */
+.cd-header,
+.ad-header,
+.md-header,
+.pp-header,
+.ap-header,
+.profile-topbar {
+  background: color-mix(in srgb, var(--cam-surface) 94%, transparent);
+  border-bottom-color: var(--cam-border);
+  box-shadow: var(--cam-shadow-sm);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+
+.cd-brand-name,
+.ad-brand-name,
+.md-brand-name,
+.pp-brand-name,
+.ap-brand-name,
+.profile-brand,
+.cd-page-title,
+.ad-page-title,
+.md-page-title,
+.pp-title,
+.ap-page-title,
+.profile-title,
+.cd-section-title,
+.ad-section-title,
+.md-section-title {
+  color: var(--cam-text);
+}
+
+.cd-page-subtitle,
+.ad-page-subtitle,
+.md-page-subtitle,
+.pp-subtitle,
+.ap-page-subtitle,
+.profile-subtitle,
+.cd-stat-label,
+.ad-stat-label,
+.md-stat-label {
+  color: var(--cam-muted);
+}
+
+.cd-stat-card,
+.ad-stat-card,
+.md-stat-card,
+.cd-vehicles-section,
+.cd-current-service-card,
+.cd-quick-action-card,
+.cd-history-card,
+.ad-card,
+.ad-table-container,
+.md-card,
+.md-job-card,
+.pp-card,
+.pp-sidebar,
+.ap-card,
+.profile-card,
+.ba-container,
+.vm-container,
+.cmm-container,
+.adp-panel,
+.user-card,
+.ur-card,
+.auth-form-box,
+.auth-left-feature,
+.feature-card,
+.features-section,
+.landing-header,
+.pp-sidebar-card {
+  background: var(--cam-surface);
+  border-color: var(--cam-border);
+  box-shadow: var(--cam-shadow-md);
+}
+
+:root[data-theme='dark'] .cd-header,
+:root[data-theme='dark'] .ad-header,
+:root[data-theme='dark'] .md-header,
+:root[data-theme='dark'] .pp-header,
+:root[data-theme='dark'] .ap-header,
+:root[data-theme='dark'] .profile-topbar {
+  background: rgba(16, 27, 45, 0.9);
+  border-bottom-color: var(--cam-border);
+  box-shadow: 0 10px 30px rgba(2, 6, 23, 0.28);
+}
+
+:root[data-theme='dark'] .cd-stat-card,
+:root[data-theme='dark'] .ad-stat-card,
+:root[data-theme='dark'] .md-stat-card,
+:root[data-theme='dark'] .cd-vehicles-section,
+:root[data-theme='dark'] .cd-current-service-card,
+:root[data-theme='dark'] .cd-quick-action-card,
+:root[data-theme='dark'] .cd-history-card,
+:root[data-theme='dark'] .ad-card,
+:root[data-theme='dark'] .ad-table-container,
+:root[data-theme='dark'] .md-card,
+:root[data-theme='dark'] .md-job-card,
+:root[data-theme='dark'] .pp-card,
+:root[data-theme='dark'] .pp-sidebar,
+:root[data-theme='dark'] .ap-card,
+:root[data-theme='dark'] .profile-card,
+:root[data-theme='dark'] .ba-container,
+:root[data-theme='dark'] .vm-container,
+:root[data-theme='dark'] .cmm-container,
+:root[data-theme='dark'] .adp-panel,
+:root[data-theme='dark'] .user-card,
+:root[data-theme='dark'] .ur-card,
+:root[data-theme='dark'] .auth-form-box,
+:root[data-theme='dark'] .auth-left-feature,
+:root[data-theme='dark'] .feature-card,
+:root[data-theme='dark'] .features-section,
+:root[data-theme='dark'] .landing-header,
+:root[data-theme='dark'] .pp-sidebar-card {
+  background: var(--cam-surface);
+  border-color: var(--cam-border);
+  box-shadow: var(--cam-shadow-md);
+}
+
+:root[data-theme='dark'] .cd-brand-name,
+:root[data-theme='dark'] .ad-brand-name,
+:root[data-theme='dark'] .md-brand-name,
+:root[data-theme='dark'] .pp-brand-name,
+:root[data-theme='dark'] .ap-brand-name,
+:root[data-theme='dark'] .profile-brand,
+:root[data-theme='dark'] .cd-page-title,
+:root[data-theme='dark'] .ad-page-title,
+:root[data-theme='dark'] .md-page-title,
+:root[data-theme='dark'] .pp-title,
+:root[data-theme='dark'] .ap-page-title,
+:root[data-theme='dark'] .profile-title,
+:root[data-theme='dark'] .cd-section-title,
+:root[data-theme='dark'] .ad-section-title,
+:root[data-theme='dark'] .md-section-title {
+  color: var(--cam-text);
+}
+
+:root[data-theme='dark'] .logo,
+:root[data-theme='dark'] .logo-text,
+:root[data-theme='dark'] .hero-title,
+:root[data-theme='dark'] .feature-title,
+:root[data-theme='dark'] .auth-left h1,
+:root[data-theme='dark'] .auth-form-box h1,
+:root[data-theme='dark'] .auth-form-box h2 {
+  color: var(--cam-text);
+}
+
+:root[data-theme='dark'] .cd-page-subtitle,
+:root[data-theme='dark'] .ad-page-subtitle,
+:root[data-theme='dark'] .md-page-subtitle,
+:root[data-theme='dark'] .pp-subtitle,
+:root[data-theme='dark'] .ap-page-subtitle,
+:root[data-theme='dark'] .profile-subtitle,
+:root[data-theme='dark'] .cd-stat-label,
+:root[data-theme='dark'] .ad-stat-label,
+:root[data-theme='dark'] .md-stat-label {
+  color: var(--cam-muted);
+}
+
+:root[data-theme='dark'] .hero-subtitle,
+:root[data-theme='dark'] .feature-description,
+:root[data-theme='dark'] .auth-left-content > p {
+  color: var(--cam-muted);
+}
+
+.cd-icon-btn,
+.ad-icon-btn,
+.md-icon-btn {
+  color: var(--cam-muted);
+}
+
+.cd-icon-btn:hover,
+.ad-icon-btn:hover,
+.md-icon-btn:hover {
+  background: var(--cam-surface-muted);
+  color: var(--cam-text-soft);
+}
+
+.cd-user-btn,
+.ad-user-btn,
+.md-user-btn,
+.cd-user-dropdown,
+.ad-user-dropdown,
+.md-user-dropdown {
+  background: var(--cam-surface-soft);
+  border-color: var(--cam-border);
+}
+
+:root[data-theme='dark'] .cd-user-btn,
+:root[data-theme='dark'] .ad-user-btn,
+:root[data-theme='dark'] .md-user-btn,
+:root[data-theme='dark'] .cd-user-dropdown,
+:root[data-theme='dark'] .ad-user-dropdown,
+:root[data-theme='dark'] .md-user-dropdown {
+  background: var(--cam-surface-soft);
+  border-color: var(--cam-border);
+  box-shadow: 0 18px 44px rgba(2, 6, 23, 0.38);
+}
+
+.cd-user-name,
+.ad-user-name,
+.md-user-name,
+.cd-dropdown-item,
+.ad-dropdown-item,
+.md-dropdown-item {
+  color: var(--cam-text-soft);
+}
+
+.cd-dropdown-item:hover,
+.ad-dropdown-item:hover,
+.md-dropdown-item:hover {
+  background: var(--cam-surface-muted);
+}
+
+.cd-dropdown-item.cd-logout:hover,
+.ad-dropdown-item.ad-logout:hover,
+.md-dropdown-item.md-logout:hover {
+  background: rgba(239, 68, 68, 0.12);
+}
+
+.ba-input,
+.ba-select,
+.ba-textarea,
+.vm-input,
+.vm-select,
+.vm-textarea,
+.cmm-input,
+.profile-card input,
+.profile-card select,
+.profile-card textarea,
+.ap-input,
+.ap-select,
+.ap-textarea,
+.pp-input,
+.pp-select,
+.pp-textarea {
+  background: var(--cam-surface-soft);
+  border-color: var(--cam-border);
+  color: var(--cam-text);
+}
+
+:root[data-theme='dark'] .ba-input,
+:root[data-theme='dark'] .ba-select,
+:root[data-theme='dark'] .ba-textarea,
+:root[data-theme='dark'] .vm-input,
+:root[data-theme='dark'] .vm-select,
+:root[data-theme='dark'] .vm-textarea,
+:root[data-theme='dark'] .cmm-input,
+:root[data-theme='dark'] .profile-card input,
+:root[data-theme='dark'] .profile-card select,
+:root[data-theme='dark'] .profile-card textarea,
+:root[data-theme='dark'] .ap-input,
+:root[data-theme='dark'] .ap-select,
+:root[data-theme='dark'] .ap-textarea,
+:root[data-theme='dark'] .pp-input,
+:root[data-theme='dark'] .pp-select,
+:root[data-theme='dark'] .pp-textarea {
+  background: var(--cam-surface-soft);
+  border-color: var(--cam-border);
+  color: var(--cam-text);
+}
+
+.ba-input:focus,
+.ba-select:focus,
+.ba-textarea:focus,
+.vm-input:focus,
+.vm-select:focus,
+.vm-textarea:focus,
+.cmm-input:focus,
+.profile-card input:focus,
+.profile-card select:focus,
+.profile-card textarea:focus,
+.ap-input:focus,
+.ap-select:focus,
+.ap-textarea:focus,
+.pp-input:focus,
+.pp-select:focus,
+.pp-textarea:focus {
+  background: var(--cam-surface);
+  border-color: var(--cam-primary);
+}
+
+:root[data-theme='dark'] .cd-stat-value,
+:root[data-theme='dark'] .ad-stat-value,
+:root[data-theme='dark'] .md-stat-value,
+:root[data-theme='dark'] .cd-history-job,
+:root[data-theme='dark'] .ad-table td,
+:root[data-theme='dark'] .md-table td,
+:root[data-theme='dark'] .pp-info-value,
+:root[data-theme='dark'] .ap-info-value,
+:root[data-theme='dark'] label,
+:root[data-theme='dark'] h1,
+:root[data-theme='dark'] h2,
+:root[data-theme='dark'] h3 {
+  color: var(--cam-text);
+}
+
+:root[data-theme='dark'] p,
+:root[data-theme='dark'] span,
+:root[data-theme='dark'] .cd-history-date,
+:root[data-theme='dark'] .cd-history-desc,
+:root[data-theme='dark'] .md-empty-state,
+:root[data-theme='dark'] .ad-empty-state {
+  color: inherit;
+}
+
+:root[data-theme='dark'] table,
+:root[data-theme='dark'] thead,
+:root[data-theme='dark'] tbody,
+:root[data-theme='dark'] tr {
+  border-color: var(--cam-border);
+}
+
+:root[data-theme='dark'] th {
+  color: #93c5fd;
+  background: rgba(15, 23, 42, 0.4);
 }

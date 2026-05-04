@@ -6,6 +6,7 @@ import { getProfile } from '../../services/profileService';
 import AppointmentDetailsPanel from '../../components/AppointmentDetailsPanel';
 import Snackbar from '../../components/Snackbar';
 import LoadingScreen from '../../components/LoadingScreen';
+import ThemeToggle from '../../components/ThemeToggle';
 import './MechanicDashboard.css';
 
 const normalizeStatus = (status) => (status === 'COMPLETED' ? 'FINISHED' : status);
@@ -233,6 +234,7 @@ const MechanicDashboard = () => {
               </svg>
               <span className="md-notification-badge">{newServiceRequests.length}</span>
             </button>
+            <ThemeToggle />
 
             <div className="md-user-menu-wrapper">
               <button className="md-user-btn" onClick={() => setShowUserMenu((prev) => !prev)} type="button">

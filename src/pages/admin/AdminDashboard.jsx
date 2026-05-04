@@ -8,6 +8,7 @@ import CreateMechanicModal from '../../components/CreateMechanicModal';
 import AppointmentDetailsPanel from '../../components/AppointmentDetailsPanel';
 import Snackbar from '../../components/Snackbar';
 import LoadingScreen from '../../components/LoadingScreen';
+import ThemeToggle from '../../components/ThemeToggle';
 import './AdminDashboard.css';
 
 const AdminDashboard = () => {
@@ -236,6 +237,7 @@ const AdminDashboard = () => {
             </svg>
             <span className="ad-notification-badge">{stats.pendingJobs}</span>
           </button>
+          <ThemeToggle />
           <div className="ad-user-menu-wrapper">
             <button
               className="ad-user-btn"
