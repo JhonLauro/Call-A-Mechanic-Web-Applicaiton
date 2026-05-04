@@ -57,6 +57,10 @@
 }
 
 .notification-menu-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 14px;
   padding: 16px 16px 14px;
   border-bottom: 1px solid var(--cam-border);
   background:
@@ -74,6 +78,27 @@
   margin: 0;
   font-size: 12px;
   color: var(--cam-muted);
+}
+
+.notification-clear-btn {
+  flex: 0 0 auto;
+  min-height: 30px;
+  padding: 0 10px;
+  border: 1px solid var(--cam-border);
+  border-radius: 999px;
+  background: var(--cam-surface);
+  color: var(--cam-primary);
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 700;
+  transition: background 0.18s ease, border-color 0.18s ease, color 0.18s ease, transform 0.18s ease;
+}
+
+.notification-clear-btn:hover {
+  background: var(--cam-primary-soft);
+  border-color: rgba(37, 99, 235, 0.24);
+  transform: translateY(-1px);
 }
 
 .notification-list {
@@ -155,6 +180,33 @@
   line-height: 1.45;
 }
 
+.notification-delete-btn {
+  flex: 0 0 auto;
+  width: 30px;
+  height: 30px;
+  margin: -2px -4px 0 0;
+  border: 1px solid transparent;
+  border-radius: 9px;
+  background: transparent;
+  color: var(--cam-muted);
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  opacity: 0;
+  transition: opacity 0.18s ease, background 0.18s ease, border-color 0.18s ease, color 0.18s ease;
+}
+
+.notification-item:hover .notification-delete-btn,
+.notification-delete-btn:focus-visible {
+  opacity: 1;
+}
+
+.notification-delete-btn:hover {
+  background: rgba(239, 68, 68, 0.1);
+  border-color: rgba(239, 68, 68, 0.18);
+  color: #dc2626;
+}
+
 .notification-empty {
   padding: 28px 16px;
   text-align: center;
@@ -187,4 +239,27 @@
 
 :root[data-theme='dark'] .notification-bell-count {
   box-shadow: 0 0 0 2px #0c1728;
+}
+
+:root[data-theme='dark'] .notification-clear-btn {
+  background: rgba(15, 31, 54, 0.92);
+  border-color: rgba(147, 197, 253, 0.18);
+  color: #93c5fd;
+}
+
+:root[data-theme='dark'] .notification-clear-btn:hover {
+  background: rgba(37, 99, 235, 0.18);
+  border-color: rgba(147, 197, 253, 0.32);
+}
+
+:root[data-theme='dark'] .notification-delete-btn:hover {
+  background: rgba(248, 113, 113, 0.14);
+  border-color: rgba(248, 113, 113, 0.26);
+  color: #fca5a5;
+}
+
+@media (hover: none) {
+  .notification-delete-btn {
+    opacity: 1;
+  }
 }
