@@ -103,6 +103,13 @@ const ClientDashboard = () => {
 
   // Get current active service (most recent active)
   const currentAppointment = activeAppointments[0];
+  const getStatusClass = (status) => {
+    if (status === 'In Progress') return 'cd-status-progress';
+    if (status === 'Finished') return 'cd-status-finished';
+    if (status === 'Cancelled') return 'cd-status-cancelled';
+    return 'cd-status-pending';
+  };
+
   const currentService = currentAppointment ? {
     vehicle: currentAppointment.vehicleInfo || 'Vehicle',
     year: '',
@@ -271,7 +278,7 @@ const ClientDashboard = () => {
                 <h3 className="cd-vehicle-name">{currentService.vehicle}</h3>
                 <p className="cd-service-description">{currentService.description}</p>
               </div>
-              <span className={`cd-status-badge ${currentService.status === 'In Progress' ? 'cd-status-progress' : 'cd-status-pending'}`}>{currentService.status}</span>
+              <span className={`cd-status-badge ${getStatusClass(currentService.status)}`}>{currentService.status}</span>
             </div>
             <div className="cd-service-details">
               <div className="cd-service-detail">
@@ -341,12 +348,7 @@ const ClientDashboard = () => {
                       <td>{service.vehicle}</td>
                       <td>{service.description}</td>
                       <td>
-                        <span className={`cd-table-status ${
-                          service.status === 'In Progress' ? 'cd-status-progress'
-                          : service.status === 'Completed' ? 'cd-status-fixed'
-                          : service.status === 'Cancelled' ? 'cd-status-cancelled'
-                          : 'cd-status-pending'
-                        }`}>
+                        <span className={`cd-table-status ${getStatusClass(service.status)}`}>
                           {service.status}
                         </span>
                       </td>

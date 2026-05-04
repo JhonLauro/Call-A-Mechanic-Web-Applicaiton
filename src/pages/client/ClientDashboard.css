@@ -417,9 +417,28 @@
 }
 
 .cd-status-progress {
-  background: rgba(255, 255, 255, 0.2);
-  color: white;
-  border: 1px solid rgba(255, 255, 255, 0.3);
+  background: #dbeafe;
+  color: #1d4ed8;
+  border: 1px solid #bfdbfe;
+}
+
+.cd-status-pending {
+  background: #fef3c7;
+  color: #b45309;
+  border: 1px solid #fde68a;
+}
+
+.cd-status-finished,
+.cd-status-fixed {
+  background: #dcfce7;
+  color: #15803d;
+  border: 1px solid #bbf7d0;
+}
+
+.cd-status-cancelled {
+  background: #fee2e2;
+  color: #b91c1c;
+  border: 1px solid #fecaca;
 }
 
 .cd-service-details {
@@ -665,14 +684,28 @@
 }
 
 .cd-table-status.cd-status-progress {
-  background: #fef3c7;
-  color: #d97706;
-  border: none;
+  background: #dbeafe;
+  color: #1d4ed8;
+  border: 1px solid #bfdbfe;
 }
 
+.cd-table-status.cd-status-pending {
+  background: #fef3c7;
+  color: #b45309;
+  border: 1px solid #fde68a;
+}
+
+.cd-table-status.cd-status-finished,
 .cd-table-status.cd-status-fixed {
   background: #dcfce7;
-  color: #16a34a;
+  color: #15803d;
+  border: 1px solid #bbf7d0;
+}
+
+.cd-table-status.cd-status-cancelled {
+  background: #fee2e2;
+  color: #b91c1c;
+  border: 1px solid #fecaca;
 }
 
 /* ── Responsive ── */

@@ -581,16 +581,25 @@
 .ad-status-pending {
   background: #fef3c7;
   color: #b45309;
+  border: 1px solid #fde68a;
 }
 
 .ad-status-progress {
   background: #dbeafe;
   color: #1d4ed8;
+  border: 1px solid #bfdbfe;
 }
 
 .ad-status-finished {
   background: #dcfce7;
-  color: #16a34a;
+  color: #15803d;
+  border: 1px solid #bbf7d0;
+}
+
+.ad-status-cancelled {
+  background: #fee2e2;
+  color: #b91c1c;
+  border: 1px solid #fecaca;
 }
 
 .ad-view-btn {

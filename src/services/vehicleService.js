@@ -1,3 +1,5 @@
+import { friendlyErrorMessage } from '../utils/friendlyErrors';
+
 const API_BASE_URL = (process.env.REACT_APP_API_BASE_URL || '/api/v1').replace(/\/$/, '');
 
 /**
@@ -26,15 +28,14 @@ const requestApi = async (endpoint, options = {}) => {
 
     if (!response.ok) {
       const errorMessage = data?.error?.message || data?.message || 'Request failed';
-      throw new Error(errorMessage);
+      const error = new Error(errorMessage);
+      error.status = response.status;
+      throw error;
     }
 
     return data;
   } catch (error) {
-    if (error.message) {
-      throw error;
-    }
-    throw new Error('Network error. Please check your connection.');
+    throw new Error(friendlyErrorMessage(error));
   }
 };
 

@@ -1,3 +1,5 @@
+import { friendlyErrorMessage } from '../utils/friendlyErrors';
+
 const API_BASE_URL = (process.env.REACT_APP_API_BASE_URL || '/api/v1').replace(/\/$/, '');
 
 export class ApiError extends Error {
@@ -43,7 +45,13 @@ export const requestApi = async (
   fallbackError = 'Request failed.',
   requiresAuth = false
 ) => {
-  const response = await fetch(`${API_BASE_URL}${endpoint}`, options);
+  let response;
+  try {
+    response = await fetch(`${API_BASE_URL}${endpoint}`, options);
+  } catch (error) {
+    throw new ApiError(friendlyErrorMessage(error), 0, 'NETWORK_ERROR');
+  }
+
   const json = await parseBody(response);
 
   if (!response.ok) {
@@ -51,10 +59,15 @@ export const requestApi = async (
       handleUnauthorized();
     }
 
-    throw new ApiError(
+    const rawError = new ApiError(
       extractErrorMessage(json, fallbackError),
       response.status,
       json?.error?.code || null
+    );
+    throw new ApiError(
+      friendlyErrorMessage(rawError, fallbackError),
+      rawError.status,
+      rawError.code
     );
   }
 
