@@ -72,8 +72,10 @@ const BookAppointment = ({ isOpen, onClose, onSuccess, vehicles = [] }) => {
     if (!formData.serviceType.trim()) {
       newErrors.serviceType = 'Service type is required';
     }
-    if (!formData.vehicleInfo.trim()) {
-      newErrors.vehicleInfo = 'Vehicle is required';
+    if (!hasVehicles) {
+      newErrors.vehicleInfo = 'Register a vehicle before booking an appointment.';
+    } else if (!formData.vehicleInfo.trim()) {
+      newErrors.vehicleInfo = 'Select one of your registered vehicles.';
     }
     if (!formData.date.trim()) {
       newErrors.date = 'Date is required';
@@ -246,17 +248,16 @@ const BookAppointment = ({ isOpen, onClose, onSuccess, vehicles = [] }) => {
                 <input
                   type="text"
                   name="vehicleInfo"
-                  className={`ba-input ${errors.vehicleInfo ? 'ba-input-error' : ''}`}
-                  placeholder="e.g., Honda Civic 2019 - ABC 1234"
-                  value={formData.vehicleInfo}
-                  onChange={handleChange}
-                  required
+                  className={`ba-input ba-input-disabled ${errors.vehicleInfo ? 'ba-input-error' : ''}`}
+                  value="Register a vehicle before booking"
+                  disabled
+                  readOnly
                 />
               )}
               {errors.vehicleInfo && <span className="ba-error">{errors.vehicleInfo}</span>}
               {!hasVehicles && (
                 <span className="ba-hint">
-                  💡 Tip: Register your vehicles in "Manage Vehicles" for quick selection
+                  Go to Manage Vehicles first, then return here to book a service.
                 </span>
               )}
             </div>

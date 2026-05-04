@@ -187,6 +187,14 @@
   color: #94a3b8;
 }
 
+.ba-input-disabled,
+.ba-input:disabled {
+  background: #f8fafc;
+  color: #64748b;
+  cursor: not-allowed;
+  opacity: 1;
+}
+
 .ba-select {
   cursor: pointer;
   appearance: none;
