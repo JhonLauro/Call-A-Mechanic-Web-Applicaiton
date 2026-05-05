@@ -749,6 +749,34 @@
   border-color: rgba(147, 197, 253, 0.36);
 }
 
+:root[data-theme='dark'] .adp-current-status.adp-status-pending,
+.theme-dark .adp-current-status.adp-status-pending {
+  background: rgba(245, 158, 11, 0.22);
+  border-color: rgba(245, 158, 11, 0.42);
+  color: #fde68a;
+}
+
+:root[data-theme='dark'] .adp-current-status.adp-status-progress,
+.theme-dark .adp-current-status.adp-status-progress {
+  background: rgba(59, 130, 246, 0.24);
+  border-color: rgba(96, 165, 250, 0.42);
+  color: #bfdbfe;
+}
+
+:root[data-theme='dark'] .adp-current-status.adp-status-finished,
+.theme-dark .adp-current-status.adp-status-finished {
+  background: rgba(34, 197, 94, 0.2);
+  border-color: rgba(34, 197, 94, 0.42);
+  color: #bbf7d0;
+}
+
+:root[data-theme='dark'] .adp-current-status.adp-status-cancelled,
+.theme-dark .adp-current-status.adp-status-cancelled {
+  background: rgba(239, 68, 68, 0.18);
+  border-color: rgba(248, 113, 113, 0.38);
+  color: #fecaca;
+}
+
 /* ── Responsive ── */
 @media (max-width: 640px) {
   .adp-panel {
