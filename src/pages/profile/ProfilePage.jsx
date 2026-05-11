@@ -35,6 +35,7 @@ const ProfilePage = () => {
 
   const [profileForm, setProfileForm] = useState({ fullName: '', phoneNumber: '' });
   const [passwordForm, setPasswordForm] = useState({ currentPassword: '', newPassword: '', confirmPassword: '' });
+  const [passwordErrors, setPasswordErrors] = useState({});
 
   const [saving, setSaving] = useState(false);
   const [snackbar, setSnackbar] = useState({ open: false, message: '', type: 'success' });
@@ -157,26 +158,40 @@ const ProfilePage = () => {
   };
 
   const handlePasswordSave = async () => {
+    const nextErrors = {};
     if (!passwordForm.currentPassword || !passwordForm.newPassword) {
-      showSnackbar('Please fill in all password fields.', 'error');
+      if (!passwordForm.currentPassword) nextErrors.currentPassword = 'Current password is required.';
+      if (!passwordForm.newPassword) nextErrors.newPassword = 'New password is required.';
+      if (!passwordForm.confirmPassword) nextErrors.confirmPassword = 'Please confirm your new password.';
+      setPasswordErrors(nextErrors);
       return;
     }
     if (passwordForm.newPassword !== passwordForm.confirmPassword) {
-      showSnackbar('New passwords do not match.', 'error');
+      setPasswordErrors({ confirmPassword: 'Passwords do not match.' });
       return;
     }
     if (passwordForm.newPassword.length < 8) {
-      showSnackbar('Password must be at least 8 characters.', 'error');
+      setPasswordErrors({ newPassword: 'Password must be at least 8 characters.' });
       return;
     }
     setSaving(true);
+    setPasswordErrors({});
     try {
-      await updatePassword({ currentPassword: passwordForm.currentPassword, newPassword: passwordForm.newPassword }, token);
+      await updatePassword({
+        currentPassword: passwordForm.currentPassword,
+        newPassword: passwordForm.newPassword,
+        confirmPassword: passwordForm.confirmPassword,
+      }, token);
       setPasswordForm({ currentPassword: '', newPassword: '', confirmPassword: '' });
       setIsChangingPassword(false);
       showSnackbar('Password changed successfully!');
     } catch (err) {
-      showSnackbar(err.message || 'Failed to change password.', 'error');
+      const message = err.message || 'Failed to change password.';
+      if (message.toLowerCase().includes('current password')) {
+        setPasswordErrors({ currentPassword: 'Current password is incorrect.' });
+      } else {
+        showSnackbar(message, 'error');
+      }
     } finally {
       setSaving(false);
     }
@@ -375,31 +390,46 @@ const ProfilePage = () => {
                     <input
                       type="password"
                       value={passwordForm.currentPassword}
-                      onChange={(e) => setPasswordForm(prev => ({ ...prev, currentPassword: e.target.value }))}
+                      onChange={(e) => {
+                        setPasswordForm(prev => ({ ...prev, currentPassword: e.target.value }));
+                        setPasswordErrors(prev => ({ ...prev, currentPassword: '' }));
+                      }}
                       placeholder="Enter current password"
+                      className={passwordErrors.currentPassword ? 'input-error' : ''}
                     />
+                    {passwordErrors.currentPassword && <span className="field-error">{passwordErrors.currentPassword}</span>}
                   </div>
                   <div className="pp-form-group">
                     <label>New Password</label>
                     <input
                       type="password"
                       value={passwordForm.newPassword}
-                      onChange={(e) => setPasswordForm(prev => ({ ...prev, newPassword: e.target.value }))}
+                      onChange={(e) => {
+                        setPasswordForm(prev => ({ ...prev, newPassword: e.target.value }));
+                        setPasswordErrors(prev => ({ ...prev, newPassword: '' }));
+                      }}
                       placeholder="Enter new password"
+                      className={passwordErrors.newPassword ? 'input-error' : ''}
                     />
+                    {passwordErrors.newPassword && <span className="field-error">{passwordErrors.newPassword}</span>}
                   </div>
                   <div className="pp-form-group">
                     <label>Confirm Password</label>
                     <input
                       type="password"
                       value={passwordForm.confirmPassword}
-                      onChange={(e) => setPasswordForm(prev => ({ ...prev, confirmPassword: e.target.value }))}
+                      onChange={(e) => {
+                        setPasswordForm(prev => ({ ...prev, confirmPassword: e.target.value }));
+                        setPasswordErrors(prev => ({ ...prev, confirmPassword: '' }));
+                      }}
                       placeholder="Confirm new password"
+                      className={passwordErrors.confirmPassword ? 'input-error' : ''}
                     />
+                    {passwordErrors.confirmPassword && <span className="field-error">{passwordErrors.confirmPassword}</span>}
                   </div>
                 </div>
                 <div className="pp-form-actions">
-                  <button className="pp-btn pp-btn-secondary" onClick={() => { setIsChangingPassword(false); setPasswordForm({ currentPassword: '', newPassword: '', confirmPassword: '' }); }}>Cancel</button>
+                  <button className="pp-btn pp-btn-secondary" onClick={() => { setIsChangingPassword(false); setPasswordForm({ currentPassword: '', newPassword: '', confirmPassword: '' }); setPasswordErrors({}); }}>Cancel</button>
                   <button className="pp-btn pp-btn-primary" onClick={handlePasswordSave} disabled={saving}>
                     {saving ? 'Updating...' : 'Update Password'}
                   </button>

@@ -231,6 +231,7 @@ const AdminProfilePage = () => {
         {
           currentPassword: passwordForm.currentPassword,
           newPassword: passwordForm.newPassword,
+          confirmPassword: passwordForm.confirmPassword,
         },
         token
       );
@@ -239,7 +240,12 @@ const AdminProfilePage = () => {
       setIsChangingPassword(false);
       showSnackbar('Password changed successfully!');
     } catch (err) {
-      showSnackbar(err.message || 'Failed to change password.', 'error');
+      const message = err.message || 'Failed to change password.';
+      if (message.toLowerCase().includes('current password')) {
+        setErrors({ currentPassword: 'Current password is incorrect' });
+      } else {
+        showSnackbar(message, 'error');
+      }
     } finally {
       setSaving(false);
     }

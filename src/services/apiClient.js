@@ -22,12 +22,18 @@ const parseBody = async (response) => {
   }
 };
 
-const extractErrorMessage = (json, fallback) =>
-  json?.error?.details ||
-  json?.error?.detail ||
-  json?.error?.message ||
-  json?.message ||
-  fallback;
+const extractErrorMessage = (json, fallback) => {
+  const details = json?.error?.details || json?.error?.detail;
+  if (typeof details === 'string') return details;
+  if (details && typeof details === 'object') {
+    const firstDetail = Object.values(details).find(Boolean);
+    if (firstDetail) return String(firstDetail);
+  }
+
+  return json?.error?.message ||
+    json?.message ||
+    fallback;
+};
 
 const handleUnauthorized = () => {
   localStorage.removeItem('cam_token');
